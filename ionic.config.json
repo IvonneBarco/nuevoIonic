@@ -1,0 +1,7 @@
+{
+  "name": "SistemaRecaudoMovil",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}

@@ -1,0 +1,160 @@
+<!--
+  Generated template for the RecaudoPuestosEventualesPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Recaudo de Puestos Eventuales</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <h1 ion-text color="primary" class="borderTitle font-title" text-center>RECIBO RECAUDO EVENTUAL</h1>
+    </ion-item>
+  </ion-list>
+
+  <!--<ion-label class="msj-respuesta"> {{respuestaExito}} {{respuestaError}}</ion-label>-->
+
+  <div #Recibo>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item-divider class="dividerTitle">
+            <ion-label>
+              <h2>
+                <ion-icon name="md-filing"></ion-icon> <b>RECIBO No. {{numRecibo}} </b>
+              </h2>
+            </ion-label>
+          </ion-item-divider>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-12>
+          <ion-searchbar type="number" (ionBlur)="buscarTercero()" [(ngModel)]="usuario.identificaciontercero"
+            placeholder="Buscar Identificacion"></ion-searchbar>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>
+          <ion-label>
+            <h2>Tarifa:</h2>
+          </ion-label>
+        </ion-col>
+        <ion-col col-6>
+          <ion-label class="font-big-green" text-right>${{format(tarifa)}} </ion-label>
+        </ion-col>
+      </ion-row>
+
+
+      <!-- <ion-row>
+        <ion-col col-10>
+          <ion-item class="inputs">
+            <ion-label color="gray" fixed>C.C No.:</ion-label>
+            <ion-input type="number" (ionBlur)="buscarTercero()" [(ngModel)]="usuario.identificaciontercero"
+              placeholder="Buscar Identificación" name="identificaciontercero"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-2>
+          <button ion-button only-icon (click)='buscarTercero()'>
+            <ion-icon name="search"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row> -->
+
+      <ion-row>
+        <ion-col col-4>
+          <ion-label color="gray" fixed>Usuario: </ion-label>
+        </ion-col>
+        <ion-col col-8>
+          <ion-input type="text" placeholder="Escriba el nombre del usuario" [(ngModel)]="usuario.nombretercero" name="nombretercero"></ion-input>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-4>
+          <ion-label color="gray" fixed>Teléfono.:</ion-label>
+        </ion-col>
+        <ion-col col-8>
+          <ion-input type="text" placeholder="Escriba el número de teléfono" [(ngModel)]="usuario.telefonotercero"></ion-input>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-10>
+          <ion-item class="inputs">
+            <ion-label color="gray" fixed>Vlr a pagar.:</ion-label>
+            <ion-input type="text" [(ngModel)]="valorPagar" name="valorPagar" placeholder="Escriba el valor a pagar"
+              #txtValorPagar (input)="txtValorPagar.value = format(valorPagar)"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-2>
+          <button ion-button only-icon (click)="audioValor()">
+            <ion-icon name="mic"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </div>
+
+  <!-- <ion-list>
+    <ion-item *ngFor="let ter of terceros">
+      <h2>ID: {{ ter.pkidsqlite }}</h2>
+      <p>Nombre: {{ ter.nombretercero }}</p>
+      <p>Identificacion: {{ ter.identificaciontercero }}</p>
+      <p>Tel: {{ ter.telefonotercero }}</p>
+      <p>Fech Cre: {{ ter.creaciontercero }}</p>
+      <p>Fech Mod: {{ ter.modificaciontercero }}</p>
+      <p>Pkid tercero: {{ ter.pkidtercero }}</p>
+      <p>Tipo tercero: {{ ter.tipotercero }}</p>
+
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-item *ngFor="let r of recibos">
+      <h2>ID: {{ r.pkidsqlite }}</h2>
+      <p>pkidrecibopuestoeventual: {{ r.pkidrecibopuestoeventual }}</p>
+      <p>numerorecibopuestoeventual: {{ r.numerorecibopuestoeventual }}</p>
+      <p>valorecibopuestoeventual: {{ r.valorecibopuestoeventual }}</p>
+      <p>creacionrecibopuestoeventual: {{ r.creacionrecibopuestoeventual }}</p>
+      <p>modificacionrecibopuestoeventual: {{ r.modificacionrecibopuestoeventual }}</p>
+      <p>fkidtarifapuestoeventual: {{ r.fkidtarifapuestoeventual }}</p>
+      <p>fkidtercero: {{ r.fkidtercero }}</p>
+      <p>nombretercero: {{ r.nombretercero }}</p>
+      <p>valortarifa: {{ r.valortarifa }}</p>
+      <p>nombreplaza: {{ r.nombreplaza }}</p>
+      <p>recibopuestoeventualactivo: {{ r.recibopuestoeventualactivo }}</p>
+      <p>nombreusuario: {{ r.nombreusuario }}</p>
+      <p>identificacionusuario: {{ r.identificacionusuario }}</p>
+      <p>nombresector: {{ r.nombresector }}</p>
+      <p>fkidsector: {{ r.fkidsector }}</p>
+      <p>sincronizado: {{ r.sincronizado }}</p>
+
+    </ion-item>
+  </ion-list>
+
+  <button ion-button icon-start block color="secondary" full (click)="m()">
+    <ion-icon name="logo-usd"></ion-icon>VALOR
+  </button>-->
+
+  <button ion-button icon-start block color="secondary" full (click)="guardarRecibo()">
+    <ion-icon name="logo-usd"></ion-icon>Guardar
+  </button> 
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <button ion-button icon-start block color="secondary" full (click)="prepareToPrint()">
+      <ion-icon name="logo-usd"></ion-icon>Guardar e Imprimir
+    </button>
+  </ion-toolbar>
+</ion-footer> 

@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>
+      Configuraciones
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <h4 ion-text color="primary" class="borderTitle font-title" text-center>SINCRONIZACIÓN</h4>
+    </ion-item>
+  </ion-list>
+  <button ion-button full (click)="getDataApi()">Sincronizar Todos Los Datos</button>
+  <button ion-button full (click)="listarDatosDB()">Listar Datos Importados</button>
+  <button ion-button full (click)="backup()">Backup</button>
+  <button ion-button full (click)="restore()">Restaurar</button>
+  <!-- <button ion-button full (click)="n()">token</button> -->
+  <!-- <button ion-button full (click)="getSectores()">Sectores</button>
+  <button ion-button full (click)="getUsuarios()">Usuarios</button>
+  <button ion-button full (click)="getPlazas()">Plazas</button>
+  <button ion-button full (click)="getTerceros()">Terceros</button> -->
+
+  <br>
+  <ion-list>
+    <h2>SECTORES</h2>
+    <ion-item *ngFor="let sector of sectores">
+      <h2>Id Sector: {{ sector.pkidsector }}</h2>
+      <p>Nombre Sector: {{ sector.nombresector }}</p>
+      <p>Plaza: {{ sector.fkidplaza }}</p>
+      <p>Tipo Sector: {{ sector.fkidtiposector }}</p>
+
+    </ion-item>
+    <hr>
+  </ion-list>
+
+
+  <ion-list>
+    <h2>USUARIOS</h2>
+    <ion-item *ngFor="let usuario of usuarios">
+      <h2>Id Usuario: {{ usuario.pkidusuario }}</h2>
+      <p>CC: : {{ usuario.identificacion }}</p>
+      <p>Nombre: {{ usuario.nombreusuario }}</p>
+      <p>Apellido: {{ usuario.apellido }}</p>
+      <p>Activo: {{ usuario.usuarioactivo }}</p>
+      <!-- <P>Rol: {{ usuario.fkidrol }}</P> -->
+      <p>Contraseña: {{ usuario.contrasenia }}</p>
+      <p>Ruta Imagen: {{ usuario.rutaimagen }}</p>
+      <p>Número Recibo: {{ usuario.numerorecibo }}</p>
+
+    </ion-item>
+    <hr>
+  </ion-list>
+
+  <ion-list>
+    <h2>PLAZAS</h2>
+    <ion-item *ngFor="let plaza of plazas">
+      <h2>Id plaza: {{ plaza.pkidplaza }}</h2>
+      <p>Nombre plaza: : {{ plaza.nombreplaza }}</p>
+
+    </ion-item>
+    <hr>
+  </ion-list>
+
+  <ion-list>
+    <h2>TERCEROS</h2>
+    <ion-item *ngFor="let tercero of terceros">
+      <h2>Id tercero: {{ tercero.pkidtercero }}</h2>
+      <p>Nombre tercero : {{ tercero.nombretercero }}</p>
+      <p>Identificación: {{ tercero.identificaciontercero }}</p>
+      <p>Teléfono: {{ tercero.telefonotercero }}</p>
+      <p>Fec. creación: {{ tercero.creaciontercero }}</p>
+      <P>Mod. creación: {{ tercero.modificaciontercero }}</P>
+      <p>Tipo tercero: {{ tercero.tipotercero }}</p>
+
+    </ion-item>
+    <hr>
+  </ion-list>
+
+
+</ion-content>

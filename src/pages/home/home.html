@@ -1,0 +1,34 @@
+<ion-header>
+</ion-header>
+
+<ion-content>
+
+  <ion-list class="margin-container">
+    <ion-item>
+      <h1 ion-text color="primary" class="font-title title-welcome" text-center padding-top>¡BIENVENIDO!</h1>
+    </ion-item>
+  </ion-list>
+
+  <form novalidate (ngSubmit)="iniciarSesion()"  >
+    <ion-list>
+      <ion-item>
+        <div padding-bottom>
+            <img alt="Usuario" class="image-login" src="./assets/imgs/user.png">
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Identificación:</ion-label>
+        <ion-input type="number" [(ngModel)]='identificacion' name="identificacion"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Contraseña:</ion-label>
+        <ion-input type="password" name="contrasenia" [(ngModel)]='contrasenia'></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div padding>
+      <button ion-button color="primary" block>Ingresar</button>      
+    </div>
+  </form>
+</ion-content>

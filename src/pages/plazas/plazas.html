@@ -1,0 +1,56 @@
+<!--
+  Generated template for the PlazasPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Plazas</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <ion-list>
+    <ion-item>
+      <h1 ion-text color="primary" class="borderTitle font-title" text-center padding-top>¿Dónde va a recaudar?
+        <ion-icon name="ios-basket"></ion-icon>
+      </h1>
+    </ion-item>
+  </ion-list>
+
+  <ion-grid>
+    <ion-row align-items-center>
+
+      <ion-col col-6 col-sm>
+        <ion-label>Plaza de mercado</ion-label>
+      </ion-col>
+
+      <ion-col col-6 col-sm>
+        <ion-select [(ngModel)]="plaza" name='plaza' interface="popover" placeholder="Plazas">
+          <ion-option value="Potrerillo">Potrerillo</ion-option>
+          <ion-option value="Dos Puentes">Dos puentes</ion-option>
+          <ion-option value="Tejar">Tejar</ion-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col col-6 col-sm>
+        <button ion-button color="primary" block (click)='goToHome()' > Cancelar </button>
+      </ion-col>
+
+      <ion-col col-6 col-sm>
+        <button ion-button color="secondary" block (click)='seleccionarPlaza()'> Aceptar </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <button ion-button block (click)='goToConfiguracion()'> CONFIGURACIÓN</button>
+
+
+</ion-content>

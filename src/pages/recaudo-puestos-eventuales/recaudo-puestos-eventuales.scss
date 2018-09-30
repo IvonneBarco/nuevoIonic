@@ -1,0 +1,44 @@
+page-recaudo-puestos-eventuales {
+
+    $colorDivider: #FF5252;
+
+    .dividerTitle{
+        background: #FF5252;
+        color: white;
+    }
+
+    .dividerTitlePrimary{
+        border: #B3E5FC;
+        border-style: groove;
+    }
+
+    .borderTitle{
+        font-size: 1.5em;
+        border-bottom: 2px solid #FF887D;
+        text-align: center;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .msj-respuesta{
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    .font-big-green{
+        font-size: 2em;
+        color: green;
+    }
+
+    .item-input .label-md, .item-select .label-md, .item-datetime .label-md {
+        color: #000000;
+    }
+
+    .inputs {
+        padding-left: 0px;
+        padding-right: 0;
+    }
+
+    
+
+}

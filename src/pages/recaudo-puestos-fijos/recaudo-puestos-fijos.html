@@ -1,0 +1,150 @@
+<!--
+  Generated template for the RecaudoPuestosFijosPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Recaudo de Puestos Fijos</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <h1 ion-text color="primary" class="borderTitle font-title" text-center>RECIBO RECAUDO FIJO</h1>
+    </ion-item>
+  </ion-list>
+
+  <ion-label class="msj-respuesta"> {{respuestaExito}} {{respuestaError}}</ion-label>
+
+  <div #Recibo>
+    <ion-item-group>
+      <ion-item-divider class="dividerTitle">
+        <ion-label>
+          <h2>
+            <ion-icon name="md-filing"></ion-icon> <b>RECIBO No. {{numRecibo}}</b>
+          </h2>
+        </ion-label>
+      </ion-item-divider>
+    </ion-item-group>
+
+    <ion-list>
+      <ion-item>
+        <ion-label color="gray"><b>Total cuota del mes $:</b> </ion-label>
+        <ion-label> ${{ totalCuota }} </ion-label>
+
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray">
+          <b> Nombre del usuario:</b> </ion-label>
+        <ion-label> {{ nombreUsuario }} </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray"><b>C.C No.:</b></ion-label>
+        <ion-label> {{ ccUsuario }} </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray"><b>Plaza:</b> </ion-label>
+        <ion-label> {{ miplaza }} </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray"><b>Sector:</b></ion-label>
+        <ion-label> {{ sectorRecibido }} </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray"><b>Puesto:</b></ion-label>
+        <ion-label> {{ puesto }} </ion-label>
+      </ion-item>
+    </ion-list>
+
+  </div>
+
+  <div #ConceptoAbono>
+    <ion-list>
+      <ion-item-group>
+        <ion-item-divider class="dividerTitle">
+          <ion-label color="white" class="text-left">
+            <h2>
+              <ion-icon name="md-cash"></ion-icon><b> CONCEPTO ABONO</b></h2>
+          </ion-label>
+        </ion-item-divider>
+      </ion-item-group>
+      <ion-item>
+        <ion-label color="gray"><b color="gray">Abono cuota mes:</b> </ion-label>
+        <ion-checkbox checked color="danger"></ion-checkbox>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="danger"><b>Valor: $</b></ion-label>
+        <ion-input type="text" [(ngModel)]='inputData.valorAbonoCuota' #txtValor (input)="txtValor.value = format(inputData.valorAbonoCuota)"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="dark"><b>Abono acuerdo de pago </b></ion-label>
+        <ion-checkbox disabled="true"></ion-checkbox>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray"><b>Valor: $</b></ion-label>
+        <ion-input type="number" [(ngModel)]='inputData.valorAcuerdoPago' readonly></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="primary"><b>Total abono: $</b></ion-label>
+        <ion-label> ${{ totalAbono }} </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="primary"><b>Saldo:</b></ion-label>
+        <ion-label color="primary">
+          <h1 color="primary"> ${{ saldo }} </h1>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray"><b>Abono Factura No.:</b> </ion-label>
+        <ion-label> {{ numAbonoFactura }} </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray"><b>Abono acuerdo pago No.:</b> </ion-label>
+        <ion-label> {{ numAbonoAcuerdo }} </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray"><b>Por el mes de: </b></ion-label>
+        <ion-label> {{ mesPago }} </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray"><b>Fecha de Abono: </b></ion-label>
+        <ion-label> {{ fechaAbono }} </ion-label>
+        <!--<ion-datetime min={{fechaAbono}} max={{fechaAbono}}   displayFormat="MM/DD/YYYY, HH:mm" [(ngModel)]="fechaAbono"></ion-datetime>-->
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="gray"><b>Recaudador:</b> </ion-label>
+        <ion-label> {{ recaudador }} </ion-label>
+      </ion-item>
+      <div hidden></div>
+    </ion-list>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <button ion-button icon-start block color="secondary" full (click)="prepareToPrint(inputData)">
+      <ion-icon name="logo-usd"></ion-icon>Realizar Pago
+    </button>
+  </ion-toolbar>
+</ion-footer>
