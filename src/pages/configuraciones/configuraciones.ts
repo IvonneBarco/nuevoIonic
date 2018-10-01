@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { GLOBAL } from './../../providers/fecha/globales';
 import { IonicPage, NavController, NavParams, LoadingController, Events, Platform } from 'ionic-angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SpeechRecognition } from '@ionic-native/speech-recognition';
 import { DatabaseProvider } from '../../providers/database/database';
+import { SincGetProvider } from '../../providers/sinc-get/sinc-get';
 
 import { Storage } from '@ionic/storage';
 
@@ -65,7 +65,7 @@ export class ConfiguracionesPage {
     public http: HttpClient,
     public events: Events,
     public loadingCtrl: LoadingController,
-    private speechRecognition: SpeechRecognition
+    private sincget:SincGetProvider
   ) {
 
     this.API_URL = GLOBAL.url;
@@ -226,9 +226,9 @@ export class ConfiguracionesPage {
     this.setOcupado('Importando BD');
     this.getSectores();
     this.getUsuarios();
-     this.getPlazas();
+    this.getPlazas();
     this.getTerceros();
-    //this.setDesocupado();
+    this.setDesocupado();
   }
 
   /**
@@ -239,130 +239,146 @@ export class ConfiguracionesPage {
   getSectores() {
     console.log("inicio a descargar");
 
-    this.loadSectores().then(
-      async (res) => {
-        let datosServidor = res['sector']; //"sector" key del Json
+    // this.loadSectores().then(
+    //   async (res) => {
+    //     let datosServidor = res['sector']; //"sector" key del Json
 
-        let ContadorLongitud = datosServidor.length;
-        console.log("Longitud: " + ContadorLongitud);
+    //     let ContadorLongitud = datosServidor.length;
+    //     console.log("Longitud: " + ContadorLongitud);
 
-        this.sql_tipoSectores = '';
+    //     this.sql_tipoSectores = '';
 
-        datosServidor.forEach(elemento => {
-          this.sql_tipoSectores += "INSERT INTO tsector ( pkidsector, nombresector, fkidplaza, fkidtiposector) VALUES (" +
-            "" + elemento.pkidsector + ", " +
-            "'" + elemento.nombresector + "', " +
-            "'" + elemento.fkidplaza + "', " +
-            "'" + elemento.fkidtiposector + "'); ";
-            console.log("INSERT INTO tsector ( pkidsector, nombresector, fkidplaza, fkidtiposector) VALUES (" +
-            "" + elemento.pkidsector + ", " +
-            "'" + elemento.nombresector + "', " +
-            "'" + elemento.fkidplaza + "', " +
-            "'" + elemento.fkidtiposector + "'); ");
+    //     datosServidor.forEach(elemento => {
+    //       this.sql_tipoSectores += "INSERT INTO tsector ( pkidsector, nombresector, fkidplaza, fkidtiposector) VALUES (" +
+    //         "" + elemento.pkidsector + ", " +
+    //         "'" + elemento.nombresector + "', " +
+    //         "'" + elemento.fkidplaza + "', " +
+    //         "'" + elemento.fkidtiposector + "'); ";
+    //         console.log("INSERT INTO tsector ( pkidsector, nombresector, fkidplaza, fkidtiposector) VALUES (" +
+    //         "" + elemento.pkidsector + ", " +
+    //         "'" + elemento.nombresector + "', " +
+    //         "'" + elemento.fkidplaza + "', " +
+    //         "'" + elemento.fkidtiposector + "'); ");
             
-        });
+    //     });
         
-        console.log("termino de armar archivo sectores");
+    //     console.log("termino de armar archivo sectores");
 
-        this.databaseprovider.fillDatabase(this.sql_tipoSectores);
+    //     this.databaseprovider.fillDatabase(this.sql_tipoSectores);
 
-      }, (error) => {
-        console.error("Error al descargar sectores " + error.massage);
-      });
-
+    //   }, (error) => {
+    //     console.error("Error al descargar sectores " + error.massage);
+    //   });
+    this.sincget.loadSectores().then(()=>{
+      console.log("bien sectores");
+  }).catch((err)=>console.error(err.message));
 
   }
 
   getUsuarios() {
     //Usuarios
     console.log("inició a descargar Usuarios");
-    this.loadUsuarios().then(
-      async (res) => {
-        let datosServidor = res['users']; //"users" key del Json
+    // this.loadUsuarios().then(
+    //   async (res) => {
+    //     let datosServidor = res['users']; //"users" key del Json
 
-        let ContadorLongitud = datosServidor.length;
-        console.log("Longitud: " + ContadorLongitud);
+    //     let ContadorLongitud = datosServidor.length;
+    //     console.log("Longitud: " + ContadorLongitud);
 
-        this.sql_usuarios = '';
+    //     this.sql_usuarios = '';
 
-        datosServidor.forEach(elemento => {
-          this.sql_usuarios += "INSERT INTO tusuario (pkidusuario, identificacion,nombreusuario,apellido,usuarioactivo,fkidrol,contrasenia,rutaimagen, numerorecibo) VALUES ("
-            + "" + elemento.pkidusuario + ", "
-            + "'" + elemento.identificacion + "',"
-            + "'" + elemento.nombreusuario + "',"
-            + "'" + elemento.apellido + "',"
-            + "'" + elemento.usuarioactivo + "',"
-            + "'" + elemento.fkidrol + "',"
-            + "'" + elemento.contrasenia + "',"
-            + "'" + elemento.rutaimagen + "',"
-            + "'1'" + ");"
+    //     datosServidor.forEach(elemento => {
+    //       this.sql_usuarios += "INSERT INTO tusuario (pkidusuario, identificacion,nombreusuario,apellido,usuarioactivo,fkidrol,contrasenia,rutaimagen, numerorecibo) VALUES ("
+    //         + "" + elemento.pkidusuario + ", "
+    //         + "'" + elemento.identificacion + "',"
+    //         + "'" + elemento.nombreusuario + "',"
+    //         + "'" + elemento.apellido + "',"
+    //         + "'" + elemento.usuarioactivo + "',"
+    //         + "'" + elemento.fkidrol + "',"
+    //         + "'" + elemento.contrasenia + "',"
+    //         + "'" + elemento.rutaimagen + "',"
+    //         + "'1'" + ");"
 
 
-        });
-        console.log("termino de armar archivo usuarios");
+    //     });
+    //     console.log("termino de armar archivo usuarios");
 
-        this.databaseprovider.fillDatabase(this.sql_usuarios);
+    //     this.databaseprovider.fillDatabase(this.sql_usuarios);
 
-      }, (error) => {
-        console.error("Error al descargar sectores " + error.massage);
-      });
+    //   }, (error) => {
+    //     console.error("Error al descargar sectores " + error.massage);
+    //   });
+    
+    // )
+    this.sincget.loadUsuarios().then(()=>{
+      console.log("bien usuarios");
+  }).catch((err)=>console.error(err.message));
+
   }
 
   getPlazas() {
     console.log("inició a descargar plazas");
-    this.loadPlazas().then(
-      async (res) => {
-        let datosServidor = res['plaza']; //"plaza" key del Json
+    // this.loadPlazas().then(
+    //   async (res) => {
+    //     let datosServidor = res['plaza']; //"plaza" key del Json
 
-        let ContadorLongitud = datosServidor.length;
-        console.log("Longitud: " + ContadorLongitud);
+    //     let ContadorLongitud = datosServidor.length;
+    //     console.log("Longitud: " + ContadorLongitud);
 
-        this.sql_plazas = '';
+    //     this.sql_plazas = '';
 
-        datosServidor.forEach(elemento => {
-          this.sql_plazas += "INSERT INTO tplaza (pkidplaza, nombreplaza) VALUES ("
-            + "" + elemento.pkidplaza + ","
-            + "'" + elemento.nombreplaza + "');"
+    //     datosServidor.forEach(elemento => {
+    //       this.sql_plazas += "INSERT INTO tplaza (pkidplaza, nombreplaza) VALUES ("
+    //         + "" + elemento.pkidplaza + ","
+    //         + "'" + elemento.nombreplaza + "');"
 
-        });
-        console.log("termino de armar archivo plazas");
+    //     });
+    //     console.log("termino de armar archivo plazas");
 
-        this.databaseprovider.fillDatabase(this.sql_plazas);
+    //     this.databaseprovider.fillDatabase(this.sql_plazas);
 
-      }, (error) => {
-        console.error("Error al descargar sectores " + error.massage);
-      });
+    //   }, (error) => {
+    //     console.error("Error al descargar sectores " + error.massage);
+    //   });
+
+    this.sincget.loadPlazas().then(()=>{
+      console.log("bien plazaloadPlazas");
+  }).catch((err)=>console.error(err.message));
   }
 
   getTerceros() {
-    console.log("inició a descargar terceros");
-    this.loadTerceros().then(
-      async (res) => {
-        let datosServidor = res['tercero']; //"tercero" key del Json
+    // console.log("inició a descargar terceros");
+    // this.loadTerceros().then(
+    //   async (res) => {
+    //     let datosServidor = res['tercero']; //"tercero" key del Json
 
-        let ContadorLongitud = datosServidor.length;
-        console.log("Longitud: " + ContadorLongitud);
+    //     let ContadorLongitud = datosServidor.length;
+    //     console.log("Longitud: " + ContadorLongitud);
 
-        this.sql_terceros = '';
+    //     this.sql_terceros = '';
 
-        datosServidor.forEach(elemento => {
-          this.sql_terceros += "INSERT INTO ttercero (nombretercero, identificaciontercero, telefonotercero, creaciontercero, modificaciontercero, pkidtercero, tipotercero) VALUES ("
-            + "'" + elemento.nombretercero + "',"
-            + "'" + elemento.identificaciontercero + "',"
-            + "'" + elemento.telefonotercero + "',"
-            + "'" + elemento.creaciontercero + "',"
-            + "'" + elemento.modificaciontercero + "',"
-            + "" + elemento.pkidtercero + ","
-            + "'" + elemento.tipotercero + "');"
+    //     datosServidor.forEach(elemento => {
+    //       this.sql_terceros += "INSERT INTO ttercero (nombretercero, identificaciontercero, telefonotercero, creaciontercero, modificaciontercero, pkidtercero, tipotercero) VALUES ("
+    //         + "'" + elemento.nombretercero + "',"
+    //         + "'" + elemento.identificaciontercero + "',"
+    //         + "'" + elemento.telefonotercero + "',"
+    //         + "'" + elemento.creaciontercero + "',"
+    //         + "'" + elemento.modificaciontercero + "',"
+    //         + "" + elemento.pkidtercero + ","
+    //         + "'" + elemento.tipotercero + "');"
 
-        });
-        console.log("termino de armar archivo terceros");
+    //     });
+    //     console.log("termino de armar archivo terceros");
 
-        this.databaseprovider.fillDatabase(this.sql_terceros);
+    //     this.databaseprovider.fillDatabase(this.sql_terceros);
 
-      }, (error) => {
-        console.error("Error al descargar terceros " + error.massage);
-      });
+    //   }, (error) => {
+    //     console.error("Error al descargar terceros " + error.massage);
+    //   });
+
+    this.sincget.loadTerceros().then(()=>{
+      console.log("bien terloadTerceros");
+  }).catch((err)=>console.error(err.message));
   }
 
   backup() {

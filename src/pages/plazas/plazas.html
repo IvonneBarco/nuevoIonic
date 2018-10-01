@@ -32,9 +32,7 @@
 
       <ion-col col-6 col-sm>
         <ion-select [(ngModel)]="plaza" name='plaza' interface="popover" placeholder="Plazas">
-          <ion-option value="Potrerillo">Potrerillo</ion-option>
-          <ion-option value="Dos Puentes">Dos puentes</ion-option>
-          <ion-option value="Tejar">Tejar</ion-option>
+          <ion-option *ngFor="let p of plazas" [value]="p.nombreplaza">{{p.nombreplaza}} </ion-option>
         </ion-select>
       </ion-col>
     </ion-row>

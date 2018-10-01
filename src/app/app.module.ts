@@ -29,6 +29,7 @@ import { ConsultaRecaudosPage } from '../pages/consulta-recaudos/consulta-recaud
 import { DatabaseProvider } from '../providers/database/database';
 import { ApiServicesProvider } from '../providers/api-services/api-services';
 import { SeparadorMilesProvider } from '../providers/separador-miles/separador-miles';
+import { SincGetProvider } from '../providers/sinc-get/sinc-get';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { SeparadorMilesProvider } from '../providers/separador-miles/separador-m
     DatabaseProvider,
     ApiServicesProvider,
     SeparadorMilesProvider,
-    SpeechRecognition
+    SpeechRecognition,
+    SincGetProvider
 
   ]
 })

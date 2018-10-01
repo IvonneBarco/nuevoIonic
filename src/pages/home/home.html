@@ -18,12 +18,14 @@
       </ion-item>
       <ion-item>
         <ion-label floating>Identificación:</ion-label>
-        <ion-input type="number" [(ngModel)]='identificacion' name="identificacion"></ion-input>
+        <ion-input #txtUsuario type="tel" [(ngModel)]='identificacion' name="identificacion"
+        (keyup.enter)="iniciarSesion()"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Contraseña:</ion-label>
-        <ion-input type="password" name="contrasenia" [(ngModel)]='contrasenia'></ion-input>
+        <ion-input #txtPass type="password" name="contrasenia" [(ngModel)]='contrasenia'
+        (keyup.enter)="iniciarSesion()"></ion-input>
       </ion-item>
     </ion-list>
 

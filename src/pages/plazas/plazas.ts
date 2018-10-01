@@ -3,7 +3,7 @@ import { DatabaseProvider } from './../../providers/database/database';
 import { GLOBAL } from './../../providers/fecha/globales';
 import { ApiServicesProvider } from '../../providers/api-services/api-services';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
 import { MenuPrincipalPage } from '../menu-principal/menu-principal';
 import { HomePage } from '../home/home';
 
@@ -26,6 +26,7 @@ export class PlazasPage {
 
   usuario = {};
   usuarios = [];
+  plazas = [];
 
   plaza: string;
   sector: string;
@@ -54,8 +55,6 @@ export class PlazasPage {
   public rutaimagen: string;
   public usuarioactivo: string;
 
-
-
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -63,7 +62,7 @@ export class PlazasPage {
     private storage: Storage,
     public apiServices: ApiServicesProvider,
     public databaseprovider: DatabaseProvider,
-    public http: HttpClient
+    public http: HttpClient, private platform:Platform
   ) {
     this.API_URL = GLOBAL.url;
     this.headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -79,6 +78,7 @@ export class PlazasPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PlazasPage');
+    this.platform.ready().then(()=>this.getPlazas());    
   }
 
   /**
@@ -210,5 +210,17 @@ export class PlazasPage {
     this.navCtrl.push(ConfiguracionesPage);
   }
 
+  getPlazas()
+  {
+    this.databaseprovider.getAllPlazas().then(data => {
+      this.plazas = data;
+      if(data)
+      {
+        this.plaza=this.plazas[0]["nombreplaza"]
+        console.log("plazas en plazas: ", this.plazas.length);
+        
+      }
+    })
+  }
 
 }

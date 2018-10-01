@@ -301,7 +301,7 @@ export class RecaudoPuestosEventualesPage {
   //     this.updateTercero();
   //   }
 
-  //   this.prepareToPrint(data);
+  //   this.prepararImpresion(data);
 
   // }
 
@@ -413,51 +413,84 @@ export class RecaudoPuestosEventualesPage {
     }));
   }
 
-  //Ejecuta la impresión que se envia desde prepareToPrint
+  //Ejecuta la impresión que se envia desde prepararImpresion
   print(device, data) {
     console.log('MAC del dispositivo: ', device);
     console.log('Información: ', data);
+    
+    this.printer.estaConectado().then((exito) => {
+      if (exito) {
+        console.log("SI ESTÁ CONECTADO");
+        this.imprimirData(data)
+      }
+      else
+      {
+        console.log("NO ESTÁ CONECTADO");
+
+        this.printer.conectarBluetooth(device).subscribe(status => {
+          console.log(status);
+          this.imprimirData(data);
+        },
+          error => {
+            console.log(error);
+            let alert = this.alertCtrl.create({
+              title: 'Hubo un error al conectar con la impresora, intente de nuevo!',
+              buttons: ['Ok']
+            });
+            alert.present();
+            //this.respuestaError = '¡El pago no se realizó!';
+          });
+      }
+    }).catch((error)=>{
+      console.error("NO ESTÁ CONECTADO ", error.message);
+
+        this.printer.conectarBluetooth(device).subscribe(status => {
+          console.log(status);
+          this.imprimirData(data);
+        },
+          error => {
+            console.log(error);
+            let alert = this.alertCtrl.create({
+              title: 'Hubo un error al conectar con la impresora, intente de nuevo!',
+              buttons: ['Ok']
+            });
+            alert.present();
+            //this.respuestaError = '¡El pago no se realizó!';
+          });
+    });
+    
+  }
+
+  private imprimirData(data: any) {
     let load = this.loadCtrl.create({
       content: 'Imprimiendo...'
     });
     load.present();
-    this.printer.conectarBluetooth(device).subscribe(status => {
-      console.log(status);
-      this.printer.printData(this.noSpecialChars(data))
-        .then(printStatus => {
-          console.log(printStatus);
-          let alert = this.alertCtrl.create({
-            title: 'Por favor, retire el recibo de su impresora.',
-            buttons: ['Ok']
-          });
-          this.navCtrl.push(MenuPrincipalPage);
-          load.dismiss();
-          alert.present();
-          //this.respuestaExito = '¡El pago se realizó exitosamente!';
-          //console.log(this.respuestaExito);
-          this.printer.desconectarBluetooth();
-        })
-        .catch(error => {
-          console.log(error);
-          let alert = this.alertCtrl.create({
-            title: 'Se produjo un error al imprimir, intente de nuevo por favor!',
-            buttons: ['Ok']
-          });
-          load.dismiss();
-          alert.present();
-          //this.respuestaError = '¡El pago no se realizó!';
-          this.printer.desconectarBluetooth();
+    this.printer.printData(this.noSpecialChars(data))
+      .then(printStatus => {
+        console.log(printStatus);
+        let alert = this.alertCtrl.create({
+          title: 'Por favor, retire el recibo de su impresora.',
+          buttons: ['Ok']
         });
-    },
-      error => {
+        this.navCtrl.push(MenuPrincipalPage);
+        load.dismiss();
+        alert.present();
+        //this.respuestaExito = '¡El pago se realizó exitosamente!';
+        //console.log(this.respuestaExito);
+        // this.printer.desconectarBluetooth();
+
+      })
+      .catch(error => {
         console.log(error);
         let alert = this.alertCtrl.create({
-          title: 'Hubo un error al conectar con la impresora, intente de nuevo!',
+          title: 'Se produjo un error al imprimir, intente de nuevo por favor!',
           buttons: ['Ok']
         });
         load.dismiss();
         alert.present();
         //this.respuestaError = '¡El pago no se realizó!';
+        this.printer.desconectarBluetooth();
       });
   }
 
@@ -472,7 +505,7 @@ export class RecaudoPuestosEventualesPage {
   }
 
   //Prepara el documeto a imprimir
-  prepareToPrint(data) {
+  prepararImpresion(data) {
 
     let numeroEnLetras = this.conversion.numeroALetras(this.unFormat(this.valorPagar), 0);
     console.log("valor en letras: " + numeroEnLetras);
@@ -487,7 +520,7 @@ export class RecaudoPuestosEventualesPage {
     //Titulo    
     receipt += commands.TEXT_FORMAT.TXT_4SQUARE;
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_CT;
-    receipt += 'ALCALDÍA DE PASTO'.toUpperCase();
+    receipt += 'ALCALDÍA DE PASTO';
     receipt += commands.EOL;
 
     //Lema
@@ -617,51 +650,11 @@ export class RecaudoPuestosEventualesPage {
     receipt += commands.EOL;
     receipt += commands.EOL;
 
-    let alert = this.alertCtrl.create({
-      title: 'Impresoras disponibles',
-      buttons: [{
-        text: 'Cancelar',
-        role: 'cancel'
-      },
-      {
-        text: 'IMPRIMIR',
-        handler: (device) => {
-          if (!device) {
-            this.showToast('Impresora seleccinada!');
-            return false;
-          }
-          console.log(device);
-          this.print(device, receipt);
-        }
-      }
-      ]
-    });
 
-    this.printer.habilitarBluetooth().then(() => {
-      this.printer.buscarBluetooth().then(devices => {
-        devices.forEach((device) => {
-          console.log('Dispositivos: ', JSON.stringify(device));
-          alert.addInput({
-            name: 'Impresora',
-            value: device.address,
-            label: device.name,
-            type: 'radio',
-            checked: true
-          });
-        });
-        alert.present();
-      }).catch((error) => {
-        console.log(error);
-        this.showToast('Hubo un error al conectar la impresora, intente de nuevo!');
-      });
-    }).catch((error) => {
-      console.log(error);
-      this.showToast('Error al activar bluetooth, por favor intente de nuevo!');
-      //this.respuestaError = '¡El pago no se realizó!';
-    });
+    this.printer.iniciarImpresion(receipt,this.alertCtrl,this.loadCtrl, this.toastCtrl);
 
-    receipt += commands.HARDWARE.HW_INIT;
-    receipt += commands.HARDWARE.HW_RESET;
+
+
 
     //this.buscarTercero();
 
@@ -715,6 +708,83 @@ export class RecaudoPuestosEventualesPage {
   }
 
 
+  private iniciarImpresion(receipt: string) {
+    this.storage.get("IMPRESORA_PRE").then((device) => {
+      if (device) {
+        this.printer.estaHabilitado().then((exito) => {
+          if (exito) {
+            console.log("SI ESTÁ HABILITADO");
+            this.print(device, receipt);
+          }
+          else {
+            console.log("NO ESTÁ HABILITADO");
+            this.printer.habilitarBluetooth().then(() => {
+              this.print(device, receipt);
+            });
+          }
+        }).catch((error) => {
+          console.error("NO ESTÁ HABILITADO", error.message);
+          this.printer.habilitarBluetooth().then(() => {
+            this.print(device, receipt);
+          });
+        });
+      }
+      else {
+        this.seleccionarImpresora(receipt);
+      }
+      // receipt += commands.HARDWARE.HW_INIT;
+      // receipt += commands.HARDWARE.HW_RESET;
+    });
+    
+  }
+
+  private seleccionarImpresora(receipt: string) {
+    let alert = this.alertCtrl.create({
+      title: 'Impresoras disponibles',
+      buttons: [{
+        text: 'Cancelar',
+        role: 'cancel'
+      },
+      {
+        text: 'IMPRIMIR',
+        handler: (device) => {
+          if (!device) {
+            this.showToast('Impresora seleccinada!');
+            return false;
+          }
+          //console.log(device);
+          this.storage.set("IMPRESORA_PRE", device);
+          this.print(device, receipt);
+        }
+      }
+      ]
+    });
+
+
+
+    this.printer.habilitarBluetooth().then(() => {
+      this.printer.buscarBluetooth().then(devices => {
+        devices.forEach((device) => {
+          console.log('Dispositivos: ', JSON.stringify(device));
+          alert.addInput({
+            name: 'Impresora',
+            value: device.address,
+            label: device.name,
+            type: 'radio',
+            checked: true
+          });
+        });
+        alert.present();
+      }).catch((error) => {
+        console.log(error);
+        this.showToast('Hubo un error al conectar la impresora, intente de nuevo!');
+      });
+    }).catch((error) => {
+      console.log(error);
+      this.showToast('Error al activar bluetooth, por favor intente de nuevo!');
+    });
+  }
+
   //imprimirRecibo genera el recibo para imprimir
   // imprimirRecibo(data) {
 
@@ -727,13 +797,13 @@ export class RecaudoPuestosEventualesPage {
 
   //   }
 
-  //   this.prepareToPrint(data);
+  //   this.prepararImpresion(data);
 
   //   // this.fechaProvider.traerFechaActual().then(
   //   //   (res) => {
   //   //     this.miFecha = res;
   //   //     console.log("Fecha: " + this.miFecha.fecha);
-  //   //     this.prepareToPrint(data);
+  //   //     this.prepararImpresion(data);
   //   //   },
   //   //   (error) => {
   //   //     console.error("AQUI!:", error.message);

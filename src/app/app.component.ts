@@ -14,6 +14,7 @@ import { ConfiguracionesPage } from './../pages/configuraciones/configuraciones'
 })
 export class MyApp {
   rootPage:any = HomePage;
+  //  rootPage:any = RecaudoPuestosEventualesPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {

@@ -195,6 +195,7 @@ export class DatabaseProvider {
       {
         usuario = { pkidusuario: data.rows.item(0).pkidusuario, nombreusuario: data.rows.item(0).nombreusuario, contrasenia: data.rows.item(0).contrasenia, apellido: data.rows.item(0).apellido, identificacion: data.rows.item(0).identificacion, codigousuario: data.rows.item(0).codigousuario, rutaimagen: data.rows.item(0).rutaimagen, usuarioactivo: data.rows.item(0).usuarioactivo };
       }
+      return usuario;
       // let usuarios = [];
       // if (data.rows.length > 0) {
       //  // this.setOcupado('Listando Datos Importados');
@@ -209,8 +210,8 @@ export class DatabaseProvider {
       // return usuarios;
 
     }, err => {
-      console.log('Error: ', err.message);
-      return [];
+      console.error('Error: ', err.message);
+      return {};
     });
   }
 
@@ -335,13 +336,13 @@ export class DatabaseProvider {
 * Select a la tabla Sector
 */
   getAllPlazas() {
-    return this.database.executeSql("SELECT * FROM tplaza", []).then((data) => {
+    return this.database.executeSql("SELECT pkidplaza, nombreplaza FROM tplaza ORDER BY nombreplaza", []).then((data) => {
 
-      let sectores = [];
+      let plazas = [];
       if (data.rows.length > 0) {
       //  this.setOcupado('Listando Datos Importados');
         for (var i = 0; i < data.rows.length; i++) {
-          sectores.push({ pkidsqlite: data.rows.item(i).pkidsqlite, pkidplaza: data.rows.item(i).pkidplaza, nombreplaza: data.rows.item(i).nombreplaza });
+          plazas.push({ pkidsqlite: data.rows.item(i).pkidsqlite, pkidplaza: data.rows.item(i).pkidplaza, nombreplaza: data.rows.item(i).nombreplaza });
         }
         console.log("N° Registros Plazas: " + data.rows.length);
 
@@ -350,7 +351,7 @@ export class DatabaseProvider {
       }
 
      // this.setDesocupado();
-      return sectores;
+      return plazas;
 
     }, err => {
       console.log('Error: ', err.message);

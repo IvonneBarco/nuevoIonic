@@ -146,15 +146,22 @@
     <ion-icon name="logo-usd"></ion-icon>VALOR
   </button>-->
 
-  <button ion-button icon-start block color="secondary" full (click)="guardarRecibo()">
-    <ion-icon name="logo-usd"></ion-icon>Guardar
-  </button> 
-
 </ion-content>
 <ion-footer>
   <ion-toolbar>
-    <button ion-button icon-start block color="secondary" full (click)="prepareToPrint()">
-      <ion-icon name="logo-usd"></ion-icon>Guardar e Imprimir
-    </button>
+    <ion-row>
+        <ion-col col-6 col-sm>
+            <button ion-button icon-start block color="secondary" full (click)="prepararImpresion()">
+                <ion-icon name="logo-usd"></ion-icon>Guardar e Imprimir
+              </button>
+        </ion-col>
+        <ion-col col-6 col-sm>
+
+            <button ion-button icon-start block color="secondary" full (click)="guardarRecibo()">
+                <ion-icon name="logo-usd"></ion-icon>Guardar
+              </button> 
+        </ion-col>
+    </ion-row>
+    
   </ion-toolbar>
 </ion-footer> 

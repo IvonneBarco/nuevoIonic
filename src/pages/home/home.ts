@@ -1,21 +1,23 @@
 import { GLOBAL } from './../../providers/fecha/globales';
 import { Http, Headers } from '@angular/http';
 import { ApiServicesProvider } from '../../providers/api-services/api-services';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, ToastController, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { PlazasPage } from '../plazas/plazas';
 import jsSHA from 'jssha'
 import 'rxjs/add/operator/map';
 import { DatabaseProvider } from '../../providers/database/database';
-
+import { SincGetProvider } from '../../providers/sinc-get/sinc-get';
+//import { Keyboard } from '@ionic-native';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-
+  @ViewChild('txtUsuario') txtUsuario;
+  @ViewChild('txtPass') txtPass;
 
   identificacion: number; //Identificación del inicio de sesión
   contrasenia: string; //Contraseña del inicio de sesión
@@ -48,7 +50,8 @@ export class HomePage {
     private storage: Storage,
     public apiServices: ApiServicesProvider,
     public databaseprovider: DatabaseProvider,
-    public http: Http
+    public http: Http,
+    private sincget: SincGetProvider
   ) {
 
     this.API_URL = GLOBAL.url;
@@ -73,11 +76,28 @@ export class HomePage {
 
   }
 
+  ionViewLoaded() {
+
+    setTimeout(() => {
+      //Keyboard.show() // for android
+      this.txtUsuario.setFocus();
+    }, 150);
+
+  }
+
+  enter()
+  {
+    
+  }
   ionViewWillLeave() {
     this.storage.get(this._TOKEN).then((val) => {
       this.TOKEN = val;
       //console.log('LO CAPTURE!: ', this.TOKEN);
     });
+
+
+
+
   }
 
 
@@ -123,13 +143,28 @@ export class HomePage {
    */
   iniciarSesion() {
 
+    if(!this.identificacion)
+    {
+      this.txtUsuario.setFocus();
+      return;
+    }
+    if(!this.contrasenia)
+    {
+      this.txtPass.setFocus();
+      return;
+    }
+
     this.databaseprovider.numeroregistrosUsuarios().then(data => {
       this.registros = data;
       console.log("REGISTRO!: ", this.registros);
 
-      if (this.registros <= 0) 
-      {
+      if (this.registros <= 0) {
         console.log("CONEXIÓN API");
+
+        let loading = this.loadingCtrl.create({
+          content: 'Iniciando sesión en el servidor...'
+        });
+        loading.present();
 
         let login = {
           contrasenia: this.contrasenia,
@@ -144,17 +179,19 @@ export class HomePage {
 
             console.log("TOKEN: " + this._TOKEN);
 
-            if (msj != 'error') {
-              let loading = this.loadingCtrl.create({
-                content: 'Iniciando Sesión...'
-              });
+            try {
+              loading.dismiss().catch(() => console.error("dimis"));
+            } catch (error) {
 
-              loading.present();
+            }
+            if (msj["status"] != 'error') {
 
               setTimeout(() => {
-                this.guardarInfoUsuario(null);
-                this.navCtrl.setRoot(PlazasPage);
-                loading.dismiss();
+                this.sincget.loadUsuarios().then(() => {
+                  this.buscarUsuario(true);
+                  // this.navCtrl.setRoot(PlazasPage);
+                  // loading.dismiss();  
+                }).catch((err) => console.error(err.message));
               }, 1500);
             } else {
               let toast = this.myToastCtrl.create({
@@ -191,7 +228,7 @@ export class HomePage {
 
   }
 
-  buscarUsuario() {
+  buscarUsuario(desdeLoginApi: boolean = false) {
     console.log("buscar: ", this.identificacion);
     this.databaseprovider.getUsuarioId(this.identificacion).then(
       (data) => {
@@ -205,11 +242,11 @@ export class HomePage {
         // }
         let usuario = data;
 
-        console.log('PASSWORD: ', this.pass);
+        //        console.log('PASSWORD: ', this.pass);
 
-        if (this.comprarPassword(this.contrasenia, this.pass)) {
+        if (desdeLoginApi || this.comprarPassword(this.contrasenia, usuario["contrasenia"])) {
           console.log("Son Iguales");
-         this.guardarInfoUsuario(usuario);
+          this.guardarInfoUsuario(usuario);
 
           let loading = this.loadingCtrl.create({
             content: 'Iniciando Sesión...'
@@ -219,7 +256,12 @@ export class HomePage {
 
           setTimeout(() => {
             this.navCtrl.setRoot(PlazasPage);
-            loading.dismiss().catch(() => console.error("dimis"));
+            try {
+              loading.dismiss().catch(() => console.error("dimis"));
+            } catch (error) {
+
+            }
+
           }, 1500);
 
         } else {
@@ -242,11 +284,10 @@ export class HomePage {
   }
 
   guardarInfoUsuario(usuario) {
-    if(usuario!=null)
-    {
-    this.recaudador = usuario["nombreusuario"] + ' ' + usuario["apellido"];
-    this.storage.set(this.keyRecaudador, this.recaudador);
-    this.storage.set("RECAUDADOR", usuario);
+    if (usuario != null) {
+      this.recaudador = usuario["nombreusuario"] + ' ' + usuario["apellido"];
+      this.storage.set(this.keyRecaudador, this.recaudador);
+      this.storage.set("RECAUDADOR", usuario);
     }
     // console.log("buscar: ", this.identificacion);
     // this.databaseprovider.getUsuarioId(this.identificacion).then(
