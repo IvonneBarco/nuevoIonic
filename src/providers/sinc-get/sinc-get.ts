@@ -3,6 +3,7 @@ import { GLOBAL } from './../../providers/fecha/globales';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from '../../providers/database/database';
+import { BehaviorSubject } from 'rxjs/Rx';
 /*
   Generated class for the SincGetProvider provider.
 
@@ -43,7 +44,12 @@ export class SincGetProvider {
       //console.log('TOKEN STORAGE en configuracion', val);
     });
   }
-
+  
+  prepararSinc()
+  {    
+    this.databaseprovider.crearEstructura();
+    return this.databaseprovider.crearEstructuraReady;
+  }
 
   /**
    * @loadUsuarios(): Descarga usuarios del REST API
@@ -75,7 +81,7 @@ export class SincGetProvider {
                 + "'" + elemento.fkidrol + "',"
                 + "'" + elemento.contrasenia + "',"
                 + "'" + elemento.rutaimagen + "',"
-                + "'1'" + ");"
+                + "1" + ");"
 
 
             });

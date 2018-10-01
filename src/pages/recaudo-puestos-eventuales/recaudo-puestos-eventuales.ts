@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { SpeechRecognition } from '@ionic-native/speech-recognition';
 import { AlertController } from 'ionic-angular';
 import { PrinterProvider } from '../../providers/printer/printer';
 import { commands } from '../../providers/printer/printer-commands';
 import { NumbersToLettersProvider } from '../../providers/numbers-to-letters/numbers-to-letters'
-import { FechaProvider } from '../../providers/fecha/fecha';
 import { MenuPrincipalPage } from '../menu-principal/menu-principal';
 import { Storage } from '@ionic/storage';
 import { ReciboPage } from '../recibo/recibo';
@@ -74,7 +73,6 @@ export class RecaudoPuestosEventualesPage {
   numAbonoAcuerdo: any;
   mesPago: any;
   fechaAbono: any = new Date().toLocaleString();
-  //fechaAbono: any = new Date().toISOString();
 
   miFecha: any = '';
 
@@ -113,12 +111,12 @@ export class RecaudoPuestosEventualesPage {
     public speechRecognition: SpeechRecognition,
     private printer: PrinterProvider,
     private conversion: NumbersToLettersProvider,
-    private storage: Storage, 
-    private singleton:SingletonProvider
+    private storage: Storage,
+    private singleton: SingletonProvider
   ) {
 
     console.log("USUARIO: ", singleton.usuario["nombreusuario"]);
-    
+
     //Recupera id recaudador
     this.storage.get(this.keyIdentificacion).then(
       (val) => {
@@ -287,163 +285,6 @@ export class RecaudoPuestosEventualesPage {
     this.usuario = {};
   }
 
-
-
-  //Metodo para escribir caracteres 
-  noSpecialChars(string) {
-    var translate = {
-      "à": "a",
-      "á": "a",
-      "â": "a",
-      "ã": "a",
-      "ä": "a",
-      "å": "a",
-      "æ": "a",
-      "ç": "c",
-      "è": "e",
-      "é": "e",
-      "ê": "e",
-      "ë": "e",
-      "ì": "i",
-      "í": "i",
-      "î": "i",
-      "ï": "i",
-      "ð": "d",
-      "ñ": "n",
-      "ò": "o",
-      "ó": "o",
-      "ô": "o",
-      "õ": "o",
-      "ö": "o",
-      "ø": "o",
-      "ù": "u",
-      "ú": "u",
-      "û": "u",
-      "ü": "u",
-      "ý": "y",
-      "þ": "b",
-      "ÿ": "y",
-      "ŕ": "r",
-      "À": "A",
-      "Á": "A",
-      "Â": "A",
-      "Ã": "A",
-      "Ä": "A",
-      "Å": "A",
-      "Æ": "A",
-      "Ç": "C",
-      "È": "E",
-      "É": "E",
-      "Ê": "E",
-      "Ë": "E",
-      "Ì": "I",
-      "Í": "I",
-      "Î": "I",
-      "Ï": "I",
-      "Ð": "D",
-      "Ñ": "N",
-      "Ò": "O",
-      "Ó": "O",
-      "Ô": "O",
-      "Õ": "O",
-      "Ö": "O",
-      "Ø": "O",
-      "Ù": "U",
-      "Ú": "U",
-      "Û": "U",
-      "Ü": "U",
-      "Ý": "Y",
-      "Þ": "B",
-      "Ÿ": "Y",
-      "Ŕ": "R"
-    },
-      translate_re = /[àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŕŕÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÝÝÞŸŔŔ]/gim;
-    return (string.replace(translate_re, function (match) {
-      return translate[match];
-    }));
-  }
-
-  //Ejecuta la impresión que se envia desde prepararImpresion
-  print(device, data) {
-    console.log('MAC del dispositivo: ', device);
-    console.log('Información: ', data);
-    
-    this.printer.estaConectado().then((exito) => {
-      if (exito) {
-        console.log("SI ESTÁ CONECTADO");
-        this.imprimirData(data)
-      }
-      else
-      {
-        console.log("NO ESTÁ CONECTADO");
-
-        this.printer.conectarBluetooth(device).subscribe(status => {
-          console.log(status);
-          this.imprimirData(data);
-        },
-          error => {
-            console.log(error);
-            let alert = this.alertCtrl.create({
-              title: 'Hubo un error al conectar con la impresora, intente de nuevo!',
-              buttons: ['Ok']
-            });
-            alert.present();
-            //this.respuestaError = '¡El pago no se realizó!';
-          });
-      }
-    }).catch((error)=>{
-      console.error("NO ESTÁ CONECTADO ", error.message);
-
-        this.printer.conectarBluetooth(device).subscribe(status => {
-          console.log(status);
-          this.imprimirData(data);
-        },
-          error => {
-            console.log(error);
-            let alert = this.alertCtrl.create({
-              title: 'Hubo un error al conectar con la impresora, intente de nuevo!',
-              buttons: ['Ok']
-            });
-            alert.present();
-            //this.respuestaError = '¡El pago no se realizó!';
-          });
-    });
-    
-  }
-
-  private imprimirData(data: any) {
-    let load = this.loadCtrl.create({
-      content: 'Imprimiendo...'
-    });
-    load.present();
-    this.printer.printData(this.noSpecialChars(data))
-      .then(printStatus => {
-        console.log(printStatus);
-        let alert = this.alertCtrl.create({
-          title: 'Por favor, retire el recibo de su impresora.',
-          buttons: ['Ok']
-        });
-        this.navCtrl.push(MenuPrincipalPage);
-        load.dismiss();
-        alert.present();
-        //this.respuestaExito = '¡El pago se realizó exitosamente!';
-        //console.log(this.respuestaExito);
-        // this.printer.desconectarBluetooth();
-
-      })
-      .catch(error => {
-        console.log(error);
-        let alert = this.alertCtrl.create({
-          title: 'Se produjo un error al imprimir, intente de nuevo por favor!',
-          buttons: ['Ok']
-        });
-        load.dismiss();
-        alert.present();
-        //this.respuestaError = '¡El pago no se realizó!';
-        this.printer.desconectarBluetooth();
-      });
-  }
-
   //Alert para mostrar información necesaria
   showToast(data) {
     let toast = this.toastCtrl.create({
@@ -454,48 +295,42 @@ export class RecaudoPuestosEventualesPage {
     toast.present();
   }
 
-  imprimir()
-  {
-    this.navCtrl.push("ReciboPage",{datosRecibo: this.armarRecibo(), callback: this.imprimirFunc});
+  imprimir() {
+    this.navCtrl.push("ReciboPage", { datosRecibo: this.armarRecibo(), callback: this.imprimirFunc });
   }
   imprimirFunc = (resultado) => {
     return new Promise((resolve, reject) => {
-        if(resultado)
-        {
-          this.prepararImpresion();
-        }
-        else
-        {
-          console.log("no imprimir");
-        }
-        
-        resolve();
-    });
-   }
+      if (resultado) {
+        this.prepararImpresion();
+      }
+      else {
+        console.log("no imprimir");
+      }
 
-   guardar()
-   {
-     
-     
-     this.navCtrl.push("ReciboPage",{datosRecibo: this.armarRecibo(), callback: this.guardarFunc});
-   }
-   guardarFunc = (resultado) => {
-    return new Promise((resolve, reject) => {
-        if(resultado)
-        {
-          this.guardarRecibo();
-        }
-        else
-        {
-          console.log("no guardar");
-        }
-        
-        resolve();
+      resolve();
     });
-   }
+  }
+
+  guardar() {
+
+
+    this.navCtrl.push("ReciboPage", { datosRecibo: this.armarRecibo(), callback: this.guardarFunc });
+  }
+  guardarFunc = (resultado) => {
+    return new Promise((resolve, reject) => {
+      if (resultado) {
+        this.guardarRecibo();
+      }
+      else {
+        console.log("no guardar");
+      }
+
+      resolve();
+    });
+  }
 
   private armarRecibo() {
-    let datos=[];
+    let datos = [];
     let numeroEnLetras = this.conversion.numeroALetras(this.unFormat(this.valorPagar), 0);
     datos.push({ "E": "No Recibo:", "V": this.numRecibo });
     datos.push({ "E": "Tarifa:", "V": this.format(this.tarifa) });
@@ -503,7 +338,7 @@ export class RecaudoPuestosEventualesPage {
     datos.push({ "E": "En letras:", "V": numeroEnLetras });
     datos.push({ "E": "Usuario:", "V": this.usuario['nombretercero'] });
     datos.push({ "E": "Recaudador:", "V": this.recaudador });
-    datos.push({ "E": "Fecha:", "V": new Date().toISOString() }); 
+    datos.push({ "E": "Fecha:", "V": new Date().toISOString() });
     return datos;
   }
 
@@ -655,165 +490,12 @@ export class RecaudoPuestosEventualesPage {
     receipt += commands.EOL;
 
 
-    this.printer.iniciarImpresion(receipt,this.alertCtrl,this.loadCtrl, this.toastCtrl);
-
-
-
-
-    //this.buscarTercero();
-
-
+    this.printer.iniciarImpresion(receipt, this.alertCtrl, this.loadCtrl, this.toastCtrl);
 
     this.guardarRecibo();
-    // //Recibo guardado en la bd
-    // this.pkidrecibopuestoeventual = '1';
-    // this.numerorecibopuestoeventual = '1';
-    // this.valorecibopuestoeventual = this.valorPagar;
-    // this.creacionrecibopuestoeventual = this.fechaCreacion;
-    // this.modificacionrecibopuestoeventual = this.fechaModificacion;
-    // this.fkidtarifapuestoeventual = '1';
-    // this.fkidtercero = idtercero;
-    // this.nombretercero_ = nomtercero;
-    // this.valortarifa = this.tarifa;
-    // this.nombreplaza = this.miplaza;
-    // this.recibopuestoeventualactivo = '1';
-    // this.nombreusuario = this.recaudador;
-    // this.identificacionusuario = this.identiStorage;
-    // this.nombresector = 'Sector 1';
-    // this.fkidsector = '1';
-    // this.sincronizado = '0';
 
-    // this.usuario['pkidrecibopuestoeventual'] = this.pkidrecibopuestoeventual;
-    // this.usuario['numerorecibopuestoeventual'] = this.numerorecibopuestoeventual;
-    // this.usuario['valorecibopuestoeventual'] = this.valorecibopuestoeventual;
-    // this.usuario['creacionrecibopuestoeventual'] = this.creacionrecibopuestoeventual;
-
-    // this.usuario['modificacionrecibopuestoeventual'] = this.modificacionrecibopuestoeventual;
-    // this.usuario['fkidtarifapuestoeventual'] = this.fkidtarifapuestoeventual;
-    // this.usuario['fkidtercero'] = this.fkidtercero;
-    // this.usuario['nombretercero'] = this.nombretercero_;
-
-    // this.usuario['valortarifa'] = this.valortarifa;
-    // this.usuario['nombreplaza'] = this.nombreplaza;
-    // this.usuario['recibopuestoeventualactivo'] = this.recibopuestoeventualactivo;
-    // this.usuario['nombreusuario'] = this.nombreusuario;
-
-    // this.usuario['identificacionusuario'] = this.identificacionusuario;
-    // this.usuario['nombresector'] = this.nombresector;
-    // this.usuario['fkidsector'] = this.fkidsector;
-    // this.usuario['sincronizado'] = this.sincronizado;
-
-    // this.databaseprovider.addReciboEventual(this.usuario['pkidrecibopuestoeventual'], this.usuario['numerorecibopuestoeventual'], this.usuario['valorecibopuestoeventual'], this.usuario['creacionrecibopuestoeventual'], this.usuario['modificacionrecibopuestoeventual'], this.usuario['fkidtarifapuestoeventual'], this.usuario['fkidtercero'], this.usuario['nombretercero'], this.usuario['valortarifa'], this.usuario['nombreplaza'], this.usuario['recibopuestoeventualactivo'], this.usuario['nombreusuario'], this.usuario['identificacionusuario'], this.usuario['nombresector'], this.usuario['fkidsector'], this.usuario['sincronizado'])
-
-    //   .then(data => {
-    //     this.loadRecibosData();
-    //   });
-    //this.usuario = {};
   }
 
-
-  private iniciarImpresion(receipt: string) {
-    this.storage.get("IMPRESORA_PRE").then((device) => {
-      if (device) {
-        this.printer.estaHabilitado().then((exito) => {
-          if (exito) {
-            console.log("SI ESTÁ HABILITADO");
-            this.print(device, receipt);
-          }
-          else {
-            console.log("NO ESTÁ HABILITADO");
-            this.printer.habilitarBluetooth().then(() => {
-              this.print(device, receipt);
-            });
-          }
-        }).catch((error) => {
-          console.error("NO ESTÁ HABILITADO", error.message);
-          this.printer.habilitarBluetooth().then(() => {
-            this.print(device, receipt);
-          });
-        });
-      }
-      else {
-        this.seleccionarImpresora(receipt);
-      }
-      // receipt += commands.HARDWARE.HW_INIT;
-      // receipt += commands.HARDWARE.HW_RESET;
-    });
-    
-  }
-
-  private seleccionarImpresora(receipt: string) {
-    let alert = this.alertCtrl.create({
-      title: 'Impresoras disponibles',
-      buttons: [{
-        text: 'Cancelar',
-        role: 'cancel'
-      },
-      {
-        text: 'IMPRIMIR',
-        handler: (device) => {
-          if (!device) {
-            this.showToast('Impresora seleccinada!');
-            return false;
-          }
-          //console.log(device);
-          this.storage.set("IMPRESORA_PRE", device);
-          this.print(device, receipt);
-        }
-      }
-      ]
-    });
-
-
-
-    this.printer.habilitarBluetooth().then(() => {
-      this.printer.buscarBluetooth().then(devices => {
-        devices.forEach((device) => {
-          console.log('Dispositivos: ', JSON.stringify(device));
-          alert.addInput({
-            name: 'Impresora',
-            value: device.address,
-            label: device.name,
-            type: 'radio',
-            checked: true
-          });
-        });
-        alert.present();
-      }).catch((error) => {
-        console.log(error);
-        this.showToast('Hubo un error al conectar la impresora, intente de nuevo!');
-      });
-    }).catch((error) => {
-      console.log(error);
-      this.showToast('Error al activar bluetooth, por favor intente de nuevo!');
-    });
-  }
-
-  //imprimirRecibo genera el recibo para imprimir
-  // imprimirRecibo(data) {
-
-  //   console.log("flag ", this.flagNuevo);
-  //   if (this.flagNuevo == false) {
-  //     this.addTercero();
-  //   } 
-  //   if (this.flagNuevo == true) {
-  //     this.updateTercero();
-
-  //   }
-
-  //   this.prepararImpresion(data);
-
-  //   // this.fechaProvider.traerFechaActual().then(
-  //   //   (res) => {
-  //   //     this.miFecha = res;
-  //   //     console.log("Fecha: " + this.miFecha.fecha);
-  //   //     this.prepararImpresion(data);
-  //   //   },
-  //   //   (error) => {
-  //   //     console.error("AQUI!:", error.message);
-  //   //   }
-  //   // )
-  // }
 
   m() {
 

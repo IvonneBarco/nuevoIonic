@@ -3,12 +3,13 @@ import { DatabaseProvider } from './../../providers/database/database';
 import { GLOBAL } from './../../providers/fecha/globales';
 import { ApiServicesProvider } from '../../providers/api-services/api-services';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
 import { MenuPrincipalPage } from '../menu-principal/menu-principal';
 import { HomePage } from '../home/home';
 
 import { Storage } from '@ionic/storage';
 import { ConfiguracionesPage } from '../configuraciones/configuraciones';
+import { SingletonProvider } from '../../providers/singleton/singleton';
 
 /**
  * Generated class for the PlazasPage page.
@@ -42,15 +43,12 @@ export class PlazasPage {
 
   usuariosData: any[]; //descarga los datos de la REST API
 
-  public sql_usuarios: string; //guarda la sql para insertar
-  public sql_tabla_usuarios = 'CREATE TABLE IF NOT EXISTS tusuario (id INTEGER PRIMARY KEY AUTOINCREMENT, pkidusuario TEXT, nombreusuario TEXT, contrasenia TEXT, apellido TEXT, identificacion TEXT, codigousuario TEXT, rutaimagen TEXT, usuarioactivo TEXT); ';
-
   /* Variables para crear el archivo sql*/
   public pkidusuario: number;
   public nombreusuario: string;
   public contrasenia: string;
   public apellido: number;
-  public identificacion: string;
+  public identificacion: string; 
   public codigousuario: string;
   public rutaimagen: string;
   public usuarioactivo: string;
@@ -62,7 +60,8 @@ export class PlazasPage {
     private storage: Storage,
     public apiServices: ApiServicesProvider,
     public databaseprovider: DatabaseProvider,
-    public http: HttpClient, private platform:Platform
+    public http: HttpClient, private platform: Platform,
+    private singleton: SingletonProvider
   ) {
     this.API_URL = GLOBAL.url;
     this.headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -78,7 +77,7 @@ export class PlazasPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PlazasPage');
-    this.platform.ready().then(()=>this.getPlazas());    
+    this.platform.ready().then(() => this.getPlazas());
   }
 
   /**
@@ -141,84 +140,22 @@ export class PlazasPage {
     }).catch(e => { console.error("Error al descargar" + e.message) });
   }
 
-  
-  /**
-   * Trae los datos desde el API con (loadUsuarios();), 
-   * los guarda en la variable sql_usuarios 
-   * y posteriormente crea el archivo RecaudoDB.sql el cual contiene la creación y los insert de la tabla tipo usuario
-   */
-  sincronizacionBase() {
-    console.log("inicio a descargar");
 
-    this.loadUsuarios().then(
-      async (res) => {
-        this.usuariosData = res['users'];
-
-        let ContadorLongitud = this.usuariosData.length;
-        console.log("Longitud: " + ContadorLongitud);
-
-        this.sql_usuarios = '';
-
-        this.usuariosData.forEach(elemento => {
-
-          "INSERT INTO tusuario (pkidusuario,"
-            + "identificacion,"
-            + "nombreusuario,"
-            + "apellido,"
-            + "usuarioactivo,"
-            + "fkidrol,"
-            + "contrasenia,"
-            + "rutaimagen)"
-          "VALUES (" + elemento.pkidusuario + ", "
-            + "'" + elemento.identificacion + "',"
-            + "'" + elemento.nombreusuario + "',"
-            + "'" + elemento.apellido + "',"
-            + "'" + elemento.usuarioactivo + "',"
-            + "'" + elemento.fkidrol + "',"
-            + "'" + elemento.contrasenia + "',"
-            + "'" + elemento.rutaimagen + ");"
-
-        });
-        console.log("termino de armar archivo");
-
-        this.databaseprovider.fillDatabase(this.sql_tabla_usuarios + this.sql_usuarios);
-
-        console.log("ESTE ES EL SQL: " + this.sql_usuarios)
-
-      }, (error) => {
-        console.error("Error al descargar usuarioes " + error.massage);
-      })
-  }
-
-  backup() {
-    this.databaseprovider.backup();
-  }
-
-
-  restore() {
-    this.databaseprovider.restore();
-  }
-
-  loadUserData() {
-    this.databaseprovider.getAllUsuarios().then(data => {
-
-      this.usuarios = data;
-    })
-  }
-
-  goToConfiguracion(){
+  goToConfiguracion() {
     this.navCtrl.push(ConfiguracionesPage);
   }
 
-  getPlazas()
-  {
+  getPlazas() {
     this.databaseprovider.getAllPlazas().then(data => {
-      this.plazas = data;
-      if(data)
-      {
-        this.plaza=this.plazas[0]["nombreplaza"]
+
+      if (data) {
+        this.plazas = data;
+        this.plaza = this.plazas[0]["nombreplaza"];
+        this.singleton.plazas = this.plazas;
         console.log("plazas en plazas: ", this.plazas.length);
-        
+      }
+      else {
+        this.plazas = [{"nombreplaza":"Debe cargar plazas","pkidsqlite":-1}];
       }
     })
   }

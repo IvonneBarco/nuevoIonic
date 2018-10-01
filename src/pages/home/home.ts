@@ -52,8 +52,8 @@ export class HomePage {
     public apiServices: ApiServicesProvider,
     public databaseprovider: DatabaseProvider,
     public http: Http,
-    private sincget: SincGetProvider, private keyboard: Keyboard, 
-    private singleton:SingletonProvider
+    private sincget: SincGetProvider, private keyboard: Keyboard,
+    private singleton: SingletonProvider
   ) {
 
     this.API_URL = GLOBAL.url;
@@ -80,34 +80,27 @@ export class HomePage {
 
   ionViewDidLoad() {
 
-    
-    
+
+
     setTimeout(() => {
       //this.keyboard.show() // for android      
       this.keyboard.setResizeMode();
-      this.txtUsuario.setFocus();   
+      this.txtUsuario.setFocus();
       this.keyboard.show() // for android
-      
+
     }, 150);
 
   }
 
-  enter()
-  {
-    
+  enter() {
+
   }
   ionViewWillLeave() {
     this.storage.get(this._TOKEN).then((val) => {
       this.TOKEN = val;
       //console.log('LO CAPTURE!: ', this.TOKEN);
     });
-
-
-
-
   }
-
-
 
   /**
    * 
@@ -150,13 +143,11 @@ export class HomePage {
    */
   iniciarSesion() {
 
-    if(!this.identificacion)
-    {
+    if (!this.identificacion) {
       this.txtUsuario.setFocus();
       return;
     }
-    if(!this.contrasenia)
-    {
+    if (!this.contrasenia) {
       this.txtPass.setFocus();
       return;
     }
@@ -194,10 +185,7 @@ export class HomePage {
             if (msj["status"] != 'error') {
 
               setTimeout(() => {
-                this.sincget.loadUsuarios().then(() => {
-                  this.buscarUsuario(true);
-                  
-                }).catch((err) => console.error(err.message));
+                this.getDataApi();
               }, 1500);
             } else {
               let toast = this.myToastCtrl.create({
@@ -234,6 +222,50 @@ export class HomePage {
 
   }
 
+  getDataApi() {
+    this.setOcupado('Importando BD');
+    this.sincget.prepararSinc().subscribe((listo) => {
+      if (listo) {
+        this.getPlazas();
+        this.getSectores();        
+        this.getUsuarios();
+      }
+      this.setDesocupado();
+    });
+  }
+
+  /**
+   * Trae los datos desde el API con (loadSectores();), 
+   * los guarda en la variable sql_tipoSector 
+   * y posteriormente crea el archivo RecaudoDB.sql el cual contiene la creación y los insert de la tabla tipo sector
+   */
+  getSectores() {
+    console.log("inicio a descargar");
+
+    this.sincget.loadSectores().then(() => {
+      console.log("bien sectores");
+    }).catch((err) => console.error(err.message));
+
+  }
+
+  getUsuarios() {
+    //Usuarios
+    console.log("inició a descargar Usuarios");
+    this.sincget.loadUsuarios().then(() => {
+      console.log("bien usuarios");
+      this.buscarUsuario(true);
+    }).catch((err) => console.error(err.message));
+
+  }
+
+  getPlazas() {
+    console.log("inició a descargar plazas");
+
+    this.sincget.loadPlazas().then(() => {
+      console.log("bien plazaloadPlazas");
+    }).catch((err) => console.error(err.message));
+  }
+
   buscarUsuario(desdeLoginApi: boolean = false) {
     console.log("buscar: ", this.identificacion);
     this.databaseprovider.getUsuarioId(this.identificacion).then(
@@ -245,21 +277,9 @@ export class HomePage {
           console.log("Son Iguales");
           this.guardarInfoUsuario(usuario);
 
-          let loading = this.loadingCtrl.create({
-            content: 'Iniciando Sesión...'
-          });
+          
 
-          loading.present();
-
-          setTimeout(() => {
-            this.navCtrl.setRoot(PlazasPage);
-            try {
-              loading.dismiss().catch(() => console.error("dimis"));
-            } catch (error) {
-
-            }
-
-          }, 1500);
+          this.ingresar();
 
         } else {
           console.log("No son iguales");
@@ -280,14 +300,30 @@ export class HomePage {
 
   }
 
+  private ingresar() {
+    let loading = this.loadingCtrl.create({
+            content: 'Iniciando Sesión...'
+          });
+
+          loading.present();
+    setTimeout(() => {
+      this.navCtrl.setRoot(PlazasPage);
+      try {
+        loading.dismiss().catch(() => console.error("dimis"));
+      }
+      catch (error) {
+      }
+    }, 1500);
+  }
+
   guardarInfoUsuario(usuario) {
     if (usuario != null) {
       this.recaudador = usuario["nombreusuario"] + ' ' + usuario["apellido"];
       this.storage.set(this.keyRecaudador, this.recaudador);
       //this.storage.set("RECAUDADOR", usuario);
-      this.singleton.usuario=usuario;
+      this.singleton.usuario = usuario;
     }
-    
+
   }
 
 

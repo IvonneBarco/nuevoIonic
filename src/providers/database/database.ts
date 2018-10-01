@@ -17,7 +17,8 @@ import { Storage } from '@ionic/storage';
 export class DatabaseProvider {
 
   database: SQLiteObject;
-  private databaseReady: BehaviorSubject<boolean>;
+  public databaseReady: BehaviorSubject<boolean>;
+  public crearEstructuraReady: BehaviorSubject<boolean>;
   loading: any;
 
   fechaCreacion: any = new Date().toLocaleString();
@@ -34,6 +35,8 @@ export class DatabaseProvider {
     public events: Events,
     public loadingCtrl: LoadingController
   ) {
+    this.databaseReady = new BehaviorSubject(false);
+    this.crearEstructuraReady = new BehaviorSubject(false);
     this.platform.ready().then(() => {
       this.storage.get('BDACTIVA').then(val => {
         if (val) {
@@ -47,7 +50,6 @@ export class DatabaseProvider {
 
       });
     });
-    // this.crearBD();
   }
 
   setOcupado(mensaje: string = 'cargando') {
@@ -67,7 +69,7 @@ export class DatabaseProvider {
    * Crea la Base de datos y verifica que bd se encuentra activa
    */
   private crearBD() {
-    this.databaseReady = new BehaviorSubject(false);
+    
     this.platform.ready().then(() => {
       this.sqlite.create({
         name: this.bdActual,
@@ -77,7 +79,12 @@ export class DatabaseProvider {
           this.database = null;
           this.database = db;
           this.storage.set('BDACTIVA', this.bdActual);
-          this.crearEstructura();
+          this.databaseReady.next(true);
+
+          // if(crearEstructura)
+          // {
+          // this.crearEstructura();
+          // }
         }, (error => {
           console.log("Error (1) " + error.message);
         }));
@@ -150,9 +157,7 @@ export class DatabaseProvider {
       .subscribe(sql => {
         this.sqlitePorter.importSqlToDb(this.database, sql)
           .then(data => {
-            this.databaseReady.next(true);
-            console.log("estructura creada");
-
+            this.crearEstructuraReady.next(true);
           })
           .catch(e => console.error(e));
       });

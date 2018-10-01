@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS tasignaciondependiente (
     fkidasignacionpuesto      INTEGER NOT NULL
 );
 
-
+DROP TABLE IF EXISTS tconfiguracion;
 -- Table: tconfiguracion
 CREATE TABLE IF NOT EXISTS tconfiguracion (
     pkidsqlite         INTEGER       PRIMARY KEY AUTOINCREMENT,
@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS tconfiguracion (
 
 
 -- Table: tusuario
+DROP TABLE IF EXISTS tusuario;
 CREATE TABLE IF NOT EXISTS tusuario (
     pkidsqlite     INTEGER       PRIMARY KEY AUTOINCREMENT,
     pkidusuario    INTEGER       NOT NULL,
@@ -34,6 +35,7 @@ CREATE TABLE IF NOT EXISTS tusuario (
 
 
 -- Table: tequipo
+DROP TABLE IF EXISTS tequipo;
 CREATE TABLE IF NOT EXISTS tequipo (
     pkidsqlite           INTEGER       PRIMARY KEY AUTOINCREMENT,
     pkidequipo           INTEGER       NOT NULL,
@@ -81,6 +83,7 @@ CREATE TABLE IF NOT EXISTS tfactura (
 
 
 -- Table: tparqueadero
+DROP TABLE IF EXISTS tparqueadero;
 CREATE TABLE IF NOT EXISTS tparqueadero (
     pkidsqlite          INTEGER       PRIMARY KEY AUTOINCREMENT,
     pkidparqueadero     INTEGER       NOT NULL,
@@ -91,6 +94,7 @@ CREATE TABLE IF NOT EXISTS tparqueadero (
 
 
 -- Table: tplaza
+DROP TABLE IF EXISTS tplaza;
 CREATE TABLE IF NOT EXISTS tplaza (
     pkidsqlite  INTEGER       PRIMARY KEY AUTOINCREMENT,
     pkidplaza   INTEGER       NOT NULL,
@@ -99,6 +103,7 @@ CREATE TABLE IF NOT EXISTS tplaza (
 
 
 -- Table: tplazatiporecaudo
+DROP TABLE IF EXISTS tplazatiporecaudo; 
 CREATE TABLE IF NOT EXISTS tplazatiporecaudo (
     pkidsqlite           INTEGER PRIMARY KEY AUTOINCREMENT,
     pkidplazatiporecaudo INTEGER NOT NULL,
@@ -108,6 +113,7 @@ CREATE TABLE IF NOT EXISTS tplazatiporecaudo (
 
 
 -- Table: tpuerta
+DROP TABLE IF EXISTS tpuerta;
 CREATE TABLE IF NOT EXISTS tpuerta (
     pkidsqlite   INTEGER       PRIMARY KEY AUTOINCREMENT,
     pkidpuerta   INTEGER       NOT NULL,
@@ -139,6 +145,7 @@ CREATE TABLE IF NOT EXISTS trecibopuestoeventual (
 
 
 -- Table: tsector
+DROP TABLE IF EXISTS tsector;
 CREATE TABLE IF NOT EXISTS tsector (
     pkidsqlite     INTEGER       PRIMARY KEY AUTOINCREMENT,
     pkidsector     INTEGER       NOT NULL,
@@ -162,6 +169,7 @@ CREATE TABLE IF NOT EXISTS ttercero (
 
 
 -- Table: ttipoanimal
+DROP TABLE IF EXISTS ttipoanimal;
 CREATE TABLE IF NOT EXISTS ttipoanimal (
     pkidsqlite       INTEGER       PRIMARY KEY AUTOINCREMENT,
     pkidtipoanimal   INTEGER       NOT NULL,
@@ -172,6 +180,7 @@ CREATE TABLE IF NOT EXISTS ttipoanimal (
 
 
 -- Table: ttiporecaudo
+DROP TABLE IF EXISTS ttiporecaudo;
 CREATE TABLE IF NOT EXISTS ttiporecaudo (
     pkidsqlite        INTEGER       PRIMARY KEY AUTOINCREMENT,
     pkidtiporecaudo   INTEGER       NOT NULL,
@@ -181,6 +190,7 @@ CREATE TABLE IF NOT EXISTS ttiporecaudo (
 
 
 -- Table: ttipovehiculo
+DROP TABLE IF EXISTS  ttipovehiculo;
 CREATE TABLE IF NOT EXISTS ttipovehiculo (
     pkidsqlite         INTEGER       PRIMARY KEY AUTOINCREMENT,
     pkidtipovehiculo   INTEGER       NOT NULL,
@@ -191,6 +201,7 @@ CREATE TABLE IF NOT EXISTS ttipovehiculo (
 
 
 -- Table: ttipoparqueadero
+DROP TABLE IF EXISTS  ttipoparqueadero;
 CREATE TABLE IF NOT EXISTS ttipoparqueadero (
     pkidsqlite            INTEGER       PRIMARY KEY AUTOINCREMENT,
     pkidtipoparqueadero   INTEGER       NOT NULL,
@@ -201,433 +212,433 @@ CREATE TABLE IF NOT EXISTS ttipoparqueadero (
 
 
 
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------- DATOS DE PRUEBA ---------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------------------------------------------------
+-- --------------------------------------------------- DATOS DE PRUEBA ---------------------------------------------------
+-- -----------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------------------------------------------------
 
-/*
-INSERT INTO tparqueadero (
-                             pkidparqueadero,
-                             numeroparqueadero,
-                             fkidtipoparqueadero,
-                             fkidplaza
-                         )
-                         VALUES (
-                             1,
-                             'Parqueadero',
-                             1,
-                             1
-                         );
+-- /*
+-- INSERT INTO tparqueadero (
+--                              pkidparqueadero,
+--                              numeroparqueadero,
+--                              fkidtipoparqueadero,
+--                              fkidplaza
+--                          )
+--                          VALUES (
+--                              1,
+--                              'Parqueadero',
+--                              1,
+--                              1
+--                          );
 
-INSERT INTO tparqueadero (
-                             pkidparqueadero,
-                             numeroparqueadero,
-                             fkidtipoparqueadero,
-                             fkidplaza
-                         )
-                         VALUES (
-                             2,
-                             'Lote',
-                             2,
-                             1
-                         );
-
-
-INSERT INTO tplaza (
-                       pkidplaza,
-                       nombreplaza
-                   )
-                   VALUES (
-                       1,
-                       'POTRERILLO'
-                   );
+-- INSERT INTO tparqueadero (
+--                              pkidparqueadero,
+--                              numeroparqueadero,
+--                              fkidtipoparqueadero,
+--                              fkidplaza
+--                          )
+--                          VALUES (
+--                              2,
+--                              'Lote',
+--                              2,
+--                              1
+--                          );
 
 
-INSERT INTO tpuerta (
-                        pkidpuerta,
-                        nombrepuerta,
-                        fkidplaza
-                    )
-                    VALUES (
-                        1,
-                        'Puerta Terminal',
-                        1
-                    );
-
-INSERT INTO tpuerta (
-                        pkidpuerta,
-                        nombrepuerta,
-                        fkidplaza
-                    )
-                    VALUES (
-                        2,
-                        'Puerta principal',
-                        1
-                    );
+-- INSERT INTO tplaza (
+--                        pkidplaza,
+--                        nombreplaza
+--                    )
+--                    VALUES (
+--                        1,
+--                        'POTRERILLO'
+--                    );
 
 
-INSERT INTO tsector (
-                        pkidsector,
-                        nombresector,
-                        fkidplaza,
-                        fkidtiposector
-                    )
-                    VALUES (
-                        1,
-                        'AVES',
-                        1,
-                        1
-                    );
+-- INSERT INTO tpuerta (
+--                         pkidpuerta,
+--                         nombrepuerta,
+--                         fkidplaza
+--                     )
+--                     VALUES (
+--                         1,
+--                         'Puerta Terminal',
+--                         1
+--                     );
 
-INSERT INTO tsector (
-                        pkidsector,
-                        nombresector,
-                        fkidplaza,
-                        fkidtiposector
-                    )
-                    VALUES (
-                        2,
-                        'FRUTAS',
-                        1,
-                        1
-                    );
-
-INSERT INTO ttipoanimal (
-                            pkidtipoanimal,
-                            idtarifa,
-                            tarifa,
-                            nombretipoanimal
-                        )
-                        VALUES (
-                            2,
-                            3,
-                            8000.0,
-                            'Ganado mayor'
-                        );
-
-INSERT INTO ttipoanimal (
-                            pkidtipoanimal,
-                            idtarifa,
-                            tarifa,
-                            nombretipoanimal
-                        )
-                        VALUES (
-                            1,
-                            1,
-                            4000.0,
-                            'Ganado menor'
-                        );
+-- INSERT INTO tpuerta (
+--                         pkidpuerta,
+--                         nombrepuerta,
+--                         fkidplaza
+--                     )
+--                     VALUES (
+--                         2,
+--                         'Puerta principal',
+--                         1
+--                     );
 
 
-INSERT INTO ttipoparqueadero (
-                                 pkidtipoparqueadero,
-                                 idtarifa,
-                                 tarifa,
-                                 nombretipoparqueadero
-                             )
-                             VALUES (
-                                 1,
-                                 2,
-                                 1000.0,
-                                 'Normal'
-                             );
+-- INSERT INTO tsector (
+--                         pkidsector,
+--                         nombresector,
+--                         fkidplaza,
+--                         fkidtiposector
+--                     )
+--                     VALUES (
+--                         1,
+--                         'AVES',
+--                         1,
+--                         1
+--                     );
 
-INSERT INTO ttipoparqueadero (
-                                 pkidtipoparqueadero,
-                                 idtarifa,
-                                 tarifa,
-                                 nombretipoparqueadero
-                             )
-                             VALUES (
-                                 2,
-                                 4,
-                                 20000.0,
-                                 'Contrato'
-                             );
+-- INSERT INTO tsector (
+--                         pkidsector,
+--                         nombresector,
+--                         fkidplaza,
+--                         fkidtiposector
+--                     )
+--                     VALUES (
+--                         2,
+--                         'FRUTAS',
+--                         1,
+--                         1
+--                     );
 
+-- INSERT INTO ttipoanimal (
+--                             pkidtipoanimal,
+--                             idtarifa,
+--                             tarifa,
+--                             nombretipoanimal
+--                         )
+--                         VALUES (
+--                             2,
+--                             3,
+--                             8000.0,
+--                             'Ganado mayor'
+--                         );
 
-INSERT INTO ttipovehiculo (
-                              pkidtipovehiculo,
-                              idtarifa,
-                              tarifa,
-                              nombretipovehiculo
-                          )
-                          VALUES (
-                              1,
-                              10,
-                              1000.0,
-                              'Camionetas hasta 2600 CC'
-                          );
-
-INSERT INTO ttipovehiculo (
-                              pkidtipovehiculo,
-                              idtarifa,
-                              tarifa,
-                              nombretipovehiculo
-                          )
-                          VALUES (
-                              2,
-                              13,
-                              2000.0,
-                              'Vehículos 350 y turbos'
-                          );
-
-INSERT INTO ttipovehiculo (
-                              pkidtipovehiculo,
-                              idtarifa,
-                              tarifa,
-                              nombretipovehiculo
-                          )
-                          VALUES (
-                              3,
-                              14,
-                              3000.0,
-                              'Camiones 6000 Cap. 12 Ton'
-                          );
-
-INSERT INTO ttipovehiculo (
-                              pkidtipovehiculo,
-                              idtarifa,
-                              tarifa,
-                              nombretipovehiculo
-                          )
-                          VALUES (
-                              4,
-                              15,
-                              4000.0,
-                              'Vehiculos Cap. 12 y 20 Ton'
-                          );
-
-INSERT INTO ttipovehiculo (
-                              pkidtipovehiculo,
-                              idtarifa,
-                              tarifa,
-                              nombretipovehiculo
-                          )
-                          VALUES (
-                              5,
-                              16,
-                              5000.0,
-                              'Vehículos Cap. Sup. 20 Ton'
-                          );
-
-INSERT INTO ttipovehiculo (
-                              pkidtipovehiculo,
-                              idtarifa,
-                              tarifa,
-                              nombretipovehiculo
-                          )
-                          VALUES (
-                              6,
-                              17,
-                              1300.0,
-                              'Camperos servicio rural'
-                          );
-
-INSERT INTO ttipovehiculo (
-                              pkidtipovehiculo,
-                              idtarifa,
-                              tarifa,
-                              nombretipovehiculo
-                          )
-                          VALUES (
-                              7,
-                              18,
-                              1000.0,
-                              'Servicio público autorizado'
-                          );
-
-INSERT INTO ttipovehiculo (
-                              pkidtipovehiculo,
-                              idtarifa,
-                              tarifa,
-                              nombretipovehiculo
-                          )
-                          VALUES (
-                              8,
-                              19,
-                              1500.0,
-                              'Vehículos particulares'
-                          );
+-- INSERT INTO ttipoanimal (
+--                             pkidtipoanimal,
+--                             idtarifa,
+--                             tarifa,
+--                             nombretipoanimal
+--                         )
+--                         VALUES (
+--                             1,
+--                             1,
+--                             4000.0,
+--                             'Ganado menor'
+--                         );
 
 
+-- INSERT INTO ttipoparqueadero (
+--                                  pkidtipoparqueadero,
+--                                  idtarifa,
+--                                  tarifa,
+--                                  nombretipoparqueadero
+--                              )
+--                              VALUES (
+--                                  1,
+--                                  2,
+--                                  1000.0,
+--                                  'Normal'
+--                              );
 
-INSERT INTO tconfiguracion (
-                               pkidconfiguracion,
-                               claveconfiguracion,
-                               valorconfiguracion
-                           )
-                           VALUES (
-                               2,
-                               'tarifaeventual',
-                               '2500'
-                           );
+-- INSERT INTO ttipoparqueadero (
+--                                  pkidtipoparqueadero,
+--                                  idtarifa,
+--                                  tarifa,
+--                                  nombretipoparqueadero
+--                              )
+--                              VALUES (
+--                                  2,
+--                                  4,
+--                                  20000.0,
+--                                  'Contrato'
+--                              );
 
-INSERT INTO tconfiguracion (
-                               pkidconfiguracion,
-                               claveconfiguracion,
-                               valorconfiguracion
-                           )
-                           VALUES (
-                               1,
-                               'idtarifaeventual',
-                               '1'
-                           );
+
+-- INSERT INTO ttipovehiculo (
+--                               pkidtipovehiculo,
+--                               idtarifa,
+--                               tarifa,
+--                               nombretipovehiculo
+--                           )
+--                           VALUES (
+--                               1,
+--                               10,
+--                               1000.0,
+--                               'Camionetas hasta 2600 CC'
+--                           );
+
+-- INSERT INTO ttipovehiculo (
+--                               pkidtipovehiculo,
+--                               idtarifa,
+--                               tarifa,
+--                               nombretipovehiculo
+--                           )
+--                           VALUES (
+--                               2,
+--                               13,
+--                               2000.0,
+--                               'Vehículos 350 y turbos'
+--                           );
+
+-- INSERT INTO ttipovehiculo (
+--                               pkidtipovehiculo,
+--                               idtarifa,
+--                               tarifa,
+--                               nombretipovehiculo
+--                           )
+--                           VALUES (
+--                               3,
+--                               14,
+--                               3000.0,
+--                               'Camiones 6000 Cap. 12 Ton'
+--                           );
+
+-- INSERT INTO ttipovehiculo (
+--                               pkidtipovehiculo,
+--                               idtarifa,
+--                               tarifa,
+--                               nombretipovehiculo
+--                           )
+--                           VALUES (
+--                               4,
+--                               15,
+--                               4000.0,
+--                               'Vehiculos Cap. 12 y 20 Ton'
+--                           );
+
+-- INSERT INTO ttipovehiculo (
+--                               pkidtipovehiculo,
+--                               idtarifa,
+--                               tarifa,
+--                               nombretipovehiculo
+--                           )
+--                           VALUES (
+--                               5,
+--                               16,
+--                               5000.0,
+--                               'Vehículos Cap. Sup. 20 Ton'
+--                           );
+
+-- INSERT INTO ttipovehiculo (
+--                               pkidtipovehiculo,
+--                               idtarifa,
+--                               tarifa,
+--                               nombretipovehiculo
+--                           )
+--                           VALUES (
+--                               6,
+--                               17,
+--                               1300.0,
+--                               'Camperos servicio rural'
+--                           );
+
+-- INSERT INTO ttipovehiculo (
+--                               pkidtipovehiculo,
+--                               idtarifa,
+--                               tarifa,
+--                               nombretipovehiculo
+--                           )
+--                           VALUES (
+--                               7,
+--                               18,
+--                               1000.0,
+--                               'Servicio público autorizado'
+--                           );
+
+-- INSERT INTO ttipovehiculo (
+--                               pkidtipovehiculo,
+--                               idtarifa,
+--                               tarifa,
+--                               nombretipovehiculo
+--                           )
+--                           VALUES (
+--                               8,
+--                               19,
+--                               1500.0,
+--                               'Vehículos particulares'
+--                           );
 
 
 
-INSERT INTO tusuario (
-                         pkidusuario,
-                         identificacion,
-                         nombreusuario,
-                         apellido,
-                         usuarioactivo,
-                         fkidrol,
-                         contrasenia,
-                         rutaimagen,
-                         numerorecibo
-                     )
-                     VALUES (
-                         1,
-                         8530210,
-                         'Alberto',
-                         'Flores',
-                         'true',
-                         0,
-                         '123',
-                         NULL,
-                         1
-                     );
+-- INSERT INTO tconfiguracion (
+--                                pkidconfiguracion,
+--                                claveconfiguracion,
+--                                valorconfiguracion
+--                            )
+--                            VALUES (
+--                                2,
+--                                'tarifaeventual',
+--                                '2500'
+--                            );
+
+-- INSERT INTO tconfiguracion (
+--                                pkidconfiguracion,
+--                                claveconfiguracion,
+--                                valorconfiguracion
+--                            )
+--                            VALUES (
+--                                1,
+--                                'idtarifaeventual',
+--                                '1'
+--                            );
 
 
-INSERT INTO tplazatiporecaudo (
-                                  pkidplazatiporecaudo,
-                                  fkidplaza,
-                                  fkidtiporecaudo
-                              )
-                              VALUES (
-                                  2,
-                                  1,
-                                  2
-                              );
 
-INSERT INTO tplazatiporecaudo (
-                                  pkidplazatiporecaudo,
-                                  fkidplaza,
-                                  fkidtiporecaudo
-                              )
-                              VALUES (
-                                  1,
-                                  1,
-                                  1
-                              );
-
-
-INSERT INTO ttiporecaudo (
-                             pkidtiporecaudo,
-                             nombretiporecaudo,
-                             tiporecaudoactivo
-                         )
-                         VALUES (
-                             1,
-                             'Puesto fijo',
-                             '1'
-                         );
-
-INSERT INTO ttiporecaudo (
-                             pkidtiporecaudo,
-                             nombretiporecaudo,
-                             tiporecaudoactivo
-                         )
-                         VALUES (
-                             2,
-                             'Puestos eventuales',
-                             '1'
-                         );
-
-INSERT INTO ttiporecaudo (
-                             pkidtiporecaudo,
-                             nombretiporecaudo,
-                             tiporecaudoactivo
-                         )
-                         VALUES (
-                             3,
-                             'Ingreso de vehículos',
-                             '1'
-                         );
-
-INSERT INTO ttiporecaudo (
-                             pkidtiporecaudo,
-                             nombretiporecaudo,
-                             tiporecaudoactivo
-                         )
-                         VALUES (
-                             4,
-                             'Animales',
-                             '1'
-                         );
-
-INSERT INTO ttiporecaudo (
-                             pkidtiporecaudo,
-                             nombretiporecaudo,
-                             tiporecaudoactivo
-                         )
-                         VALUES (
-                             5,
-                             'Pesaje',
-                             '1'
-                         );
-
-INSERT INTO ttiporecaudo (
-                             pkidtiporecaudo,
-                             nombretiporecaudo,
-                             tiporecaudoactivo
-                         )
-                         VALUES (
-                             6,
-                             'Parqueadero',
-                             '1'
-                         );
+-- INSERT INTO tusuario (
+--                          pkidusuario,
+--                          identificacion,
+--                          nombreusuario,
+--                          apellido,
+--                          usuarioactivo,
+--                          fkidrol,
+--                          contrasenia,
+--                          rutaimagen,
+--                          numerorecibo
+--                      )
+--                      VALUES (
+--                          1,
+--                          8530210,
+--                          'Alberto',
+--                          'Flores',
+--                          'true',
+--                          0,
+--                          '123',
+--                          NULL,
+--                          1
+--                      );
 
 
-INSERT INTO ttercero (
-                         nombretercero,
-                         identificaciontercero,
-                         telefonotercero,
-                         creaciontercero,
-                         modificaciontercero,
-                         pkidtercero,
-                         tipotercero
-                     )
-                     VALUES (
-                         'Pedro Rojas',
-                         '98010101',
-                         '7202020',
-                         '25/9/2018, 2:30:10 p.m',
-                         '25/9/2018, 2:30:10 p.m',
-                         '1',
-                         'tipo tercero 1'
-                     );
+-- INSERT INTO tplazatiporecaudo (
+--                                   pkidplazatiporecaudo,
+--                                   fkidplaza,
+--                                   fkidtiporecaudo
+--                               )
+--                               VALUES (
+--                                   2,
+--                                   1,
+--                                   2
+--                               );
+
+-- INSERT INTO tplazatiporecaudo (
+--                                   pkidplazatiporecaudo,
+--                                   fkidplaza,
+--                                   fkidtiporecaudo
+--                               )
+--                               VALUES (
+--                                   1,
+--                                   1,
+--                                   1
+--                               );
+
+
+-- INSERT INTO ttiporecaudo (
+--                              pkidtiporecaudo,
+--                              nombretiporecaudo,
+--                              tiporecaudoactivo
+--                          )
+--                          VALUES (
+--                              1,
+--                              'Puesto fijo',
+--                              '1'
+--                          );
+
+-- INSERT INTO ttiporecaudo (
+--                              pkidtiporecaudo,
+--                              nombretiporecaudo,
+--                              tiporecaudoactivo
+--                          )
+--                          VALUES (
+--                              2,
+--                              'Puestos eventuales',
+--                              '1'
+--                          );
+
+-- INSERT INTO ttiporecaudo (
+--                              pkidtiporecaudo,
+--                              nombretiporecaudo,
+--                              tiporecaudoactivo
+--                          )
+--                          VALUES (
+--                              3,
+--                              'Ingreso de vehículos',
+--                              '1'
+--                          );
+
+-- INSERT INTO ttiporecaudo (
+--                              pkidtiporecaudo,
+--                              nombretiporecaudo,
+--                              tiporecaudoactivo
+--                          )
+--                          VALUES (
+--                              4,
+--                              'Animales',
+--                              '1'
+--                          );
+
+-- INSERT INTO ttiporecaudo (
+--                              pkidtiporecaudo,
+--                              nombretiporecaudo,
+--                              tiporecaudoactivo
+--                          )
+--                          VALUES (
+--                              5,
+--                              'Pesaje',
+--                              '1'
+--                          );
+
+-- INSERT INTO ttiporecaudo (
+--                              pkidtiporecaudo,
+--                              nombretiporecaudo,
+--                              tiporecaudoactivo
+--                          )
+--                          VALUES (
+--                              6,
+--                              'Parqueadero',
+--                              '1'
+--                          );
+
+
+-- INSERT INTO ttercero (
+--                          nombretercero,
+--                          identificaciontercero,
+--                          telefonotercero,
+--                          creaciontercero,
+--                          modificaciontercero,
+--                          pkidtercero,
+--                          tipotercero
+--                      )
+--                      VALUES (
+--                          'Pedro Rojas',
+--                          '98010101',
+--                          '7202020',
+--                          '25/9/2018, 2:30:10 p.m',
+--                          '25/9/2018, 2:30:10 p.m',
+--                          '1',
+--                          'tipo tercero 1'
+--                      );
                      
-INSERT INTO ttercero (
-                         nombretercero,
-                         identificaciontercero,
-                         telefonotercero,
-                         creaciontercero,
-                         modificaciontercero,
-                         pkidtercero,
-                         tipotercero
-                     )
-                     VALUES (
-                         'María Perez',
-                         '59020202',
-                         '7303030',
-                         '25/9/2018, 2:30:10 p.m',
-                         '25/9/2018, 2:30:10 p.m',
-                         '2',
-                         'tipo tercero 2'
-                     );
-*/
---COMMIT TRANSACTION;
+-- INSERT INTO ttercero (
+--                          nombretercero,
+--                          identificaciontercero,
+--                          telefonotercero,
+--                          creaciontercero,
+--                          modificaciontercero,
+--                          pkidtercero,
+--                          tipotercero
+--                      )
+--                      VALUES (
+--                          'María Perez',
+--                          '59020202',
+--                          '7303030',
+--                          '25/9/2018, 2:30:10 p.m',
+--                          '25/9/2018, 2:30:10 p.m',
+--                          '2',
+--                          'tipo tercero 2'
+--                      );
+-- */
+-- --COMMIT TRANSACTION;
