@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { GLOBAL } from './../../providers/fecha/globales';
-import { IonicPage, NavController, NavParams, LoadingController, Events, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Events, Platform, AlertController, ToastController } from 'ionic-angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DatabaseProvider } from '../../providers/database/database';
+import { PrinterProvider } from '../../providers/printer/printer';
 import { SincGetProvider } from '../../providers/sinc-get/sinc-get';
 
 import { Storage } from '@ionic/storage';
@@ -59,13 +60,17 @@ export class ConfiguracionesPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public alertCtrl: AlertController,
+    private loadCtrl: LoadingController,
+    private toastCtrl: ToastController,
     private databaseprovider: DatabaseProvider,
     private storage: Storage,
     private platform: Platform,
     public http: HttpClient,
     public events: Events,
     public loadingCtrl: LoadingController,
-    private sincget:SincGetProvider
+    private sincget: SincGetProvider,
+    private impresora: PrinterProvider
   ) {
 
     this.API_URL = GLOBAL.url;
@@ -126,9 +131,9 @@ export class ConfiguracionesPage {
 
   setDesocupado() {
     try {
-      this.loading.dismiss().catch(()=>console.error("dimis"));
+      this.loading.dismiss().catch(() => console.error("dimis"));
     } catch (error) {
-      
+
     }
   }
 
@@ -259,9 +264,9 @@ export class ConfiguracionesPage {
     //         "'" + elemento.nombresector + "', " +
     //         "'" + elemento.fkidplaza + "', " +
     //         "'" + elemento.fkidtiposector + "'); ");
-            
+
     //     });
-        
+
     //     console.log("termino de armar archivo sectores");
 
     //     this.databaseprovider.fillDatabase(this.sql_tipoSectores);
@@ -269,9 +274,9 @@ export class ConfiguracionesPage {
     //   }, (error) => {
     //     console.error("Error al descargar sectores " + error.massage);
     //   });
-    this.sincget.loadSectores().then(()=>{
+    this.sincget.loadSectores().then(() => {
       console.log("bien sectores");
-  }).catch((err)=>console.error(err.message));
+    }).catch((err) => console.error(err.message));
 
   }
 
@@ -308,11 +313,11 @@ export class ConfiguracionesPage {
     //   }, (error) => {
     //     console.error("Error al descargar sectores " + error.massage);
     //   });
-    
+
     // )
-    this.sincget.loadUsuarios().then(()=>{
+    this.sincget.loadUsuarios().then(() => {
       console.log("bien usuarios");
-  }).catch((err)=>console.error(err.message));
+    }).catch((err) => console.error(err.message));
 
   }
 
@@ -341,9 +346,9 @@ export class ConfiguracionesPage {
     //     console.error("Error al descargar sectores " + error.massage);
     //   });
 
-    this.sincget.loadPlazas().then(()=>{
+    this.sincget.loadPlazas().then(() => {
       console.log("bien plazaloadPlazas");
-  }).catch((err)=>console.error(err.message));
+    }).catch((err) => console.error(err.message));
   }
 
   getTerceros() {
@@ -376,9 +381,9 @@ export class ConfiguracionesPage {
     //     console.error("Error al descargar terceros " + error.massage);
     //   });
 
-    this.sincget.loadTerceros().then(()=>{
+    this.sincget.loadTerceros().then(() => {
       console.log("bien terloadTerceros");
-  }).catch((err)=>console.error(err.message));
+    }).catch((err) => console.error(err.message));
   }
 
   backup() {
@@ -388,6 +393,10 @@ export class ConfiguracionesPage {
 
   restore() {
     this.databaseprovider.restore();
+  }
+
+  configurarImpresora(){
+    this.impresora.seleccionarImpresora(null, this.alertCtrl, this.loadCtrl, this.toastCtrl, false);
   }
 
   n() {

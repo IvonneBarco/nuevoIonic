@@ -30,6 +30,9 @@ import { DatabaseProvider } from '../providers/database/database';
 import { ApiServicesProvider } from '../providers/api-services/api-services';
 import { SeparadorMilesProvider } from '../providers/separador-miles/separador-miles';
 import { SincGetProvider } from '../providers/sinc-get/sinc-get';
+import { Keyboard } from '@ionic-native/Keyboard';
+import { SingletonProvider } from '../providers/singleton/singleton';
+
 
 @NgModule({
   declarations: [
@@ -76,7 +79,9 @@ import { SincGetProvider } from '../providers/sinc-get/sinc-get';
     ApiServicesProvider,
     SeparadorMilesProvider,
     SpeechRecognition,
-    SincGetProvider
+    SincGetProvider,
+    Keyboard,
+    SingletonProvider
 
   ]
 })

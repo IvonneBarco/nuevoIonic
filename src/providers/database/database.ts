@@ -191,27 +191,23 @@ export class DatabaseProvider {
     return this.database.executeSql("SELECT pkidusuario, identificacion, nombreusuario, apellido, contrasenia FROM tusuario WHERE identificacion='" + datoBuscar + "'", []).then((data) => {
 
       let usuario;
-      if (data.rows.length > 0) 
-      {
+      if (data.rows.length > 0) {
         usuario = { pkidusuario: data.rows.item(0).pkidusuario, nombreusuario: data.rows.item(0).nombreusuario, contrasenia: data.rows.item(0).contrasenia, apellido: data.rows.item(0).apellido, identificacion: data.rows.item(0).identificacion, codigousuario: data.rows.item(0).codigousuario, rutaimagen: data.rows.item(0).rutaimagen, usuarioactivo: data.rows.item(0).usuarioactivo };
       }
       return usuario;
-      // let usuarios = [];
-      // if (data.rows.length > 0) {
-      //  // this.setOcupado('Listando Datos Importados');
-      //   for (var i = 0; i < data.rows.length; i++) {
-      //     usuarios.push({ pkidusuario: data.rows.item(i).pkidusuario, nombreusuario: data.rows.item(i).nombreusuario, contrasenia: data.rows.item(i).contrasenia, apellido: data.rows.item(i).apellido, identificacion: data.rows.item(i).identificacion, codigousuario: data.rows.item(i).codigousuario, rutaimagen: data.rows.item(i).rutaimagen, usuarioactivo: data.rows.item(i).usuarioactivo });
-      //     console.log("DATOS USUARIO: ", data.rows.item(i).nombreusuario);
-      //   }
-      //   console.log("N° Registros: " + data.rows.length);
-
-      // }
-      // //this.setDesocupado();
-      // return usuarios;
-
     }, err => {
       console.error('Error: ', err.message);
       return {};
+    });
+  }
+
+  actualizarNumeroRecibo(idUsuario, nuevoValor) {
+    return this.database.executeSql("UPDATE tusuario SET numerorecibo=" + nuevoValor + " WHERE pkidsqlite='" + idUsuario + "'", []).then((data) => {
+
+      return true;
+    }, err => {
+      console.error('Error: ', err.message);
+      return false;
     });
   }
 
@@ -221,7 +217,7 @@ export class DatabaseProvider {
 
     return this.database.executeSql("SELECT pkidusuario FROM tusuario limit 1", []).then((data) => {
 
-      let numreg=[];
+      let numreg = [];
       if (data.rows.length > 0) {
         numreg = data.rows.length;
 
@@ -252,7 +248,7 @@ export class DatabaseProvider {
 
       let terceros = [];
       if (data.rows.length > 0) {
-       // this.setOcupado('Listando Datos Importados');
+        // this.setOcupado('Listando Datos Importados');
         for (var i = 0; i < data.rows.length; i++) {
           terceros.push({ pkidsqlite: data.rows.item(i).pkidsqlite, nombretercero: data.rows.item(i).nombretercero, identificaciontercero: data.rows.item(i).identificaciontercero, telefonotercero: data.rows.item(i).telefonotercero, creaciontercero: data.rows.item(i).creaciontercero, modificaciontercero: data.rows.item(i).modificaciontercero, pkidtercero: data.rows.item(i).pkidtercero, tipotercero: data.rows.item(i).tipotercero });
           //console.log("DATOS TERCERO: ", data.rows.item(i).nombretercero);
@@ -275,21 +271,21 @@ export class DatabaseProvider {
   getTercero(datoBuscar) {
     return this.database.executeSql("SELECT pkidsqlite, nombretercero, identificaciontercero, telefonotercero FROM ttercero WHERE identificaciontercero='" + datoBuscar + "'", []).then((data) => {
 
-      let terceros:any;
+      let terceros: any;
       if (data.rows.length > 0) {
-       // this.setOcupado('Listando Datos Importados');
+        // this.setOcupado('Listando Datos Importados');
         // for (var i = 0; i < data.rows.length; i++) {
         //   terceros.push({ pkidsqlite: data.rows.item(i).pkidsqlite, nombretercero: data.rows.item(i).nombretercero, identificaciontercero: data.rows.item(i).identificaciontercero, telefonotercero: data.rows.item(i).telefonotercero });
         //   console.log("DATOS TERCERO: ", data.rows.item(i).nombretercero);
         // }
-        terceros={ pkidsqlite: data.rows.item(0).pkidsqlite, nombretercero: data.rows.item(0).nombretercero, identificaciontercero: data.rows.item(0).identificaciontercero, telefonotercero: data.rows.item(0).telefonotercero };
+        terceros = { pkidsqlite: data.rows.item(0).pkidsqlite, nombretercero: data.rows.item(0).nombretercero, identificaciontercero: data.rows.item(0).identificaciontercero, telefonotercero: data.rows.item(0).telefonotercero };
         console.log("N° Registros: " + data.rows.length);
 
       } else {
         console.log("No existe, hay que agregarlo!");
       }
 
-     // this.setDesocupado();
+      // this.setDesocupado();
       return terceros;
 
     }, err => {
@@ -298,7 +294,7 @@ export class DatabaseProvider {
     });
   }
 
-  
+
   addTercero(nombretercero, identificaciontercero, telefonotercero, creaciontercero, modificaciontercero, pkidtercero, tipotercero) {
     let data = [nombretercero, identificaciontercero, telefonotercero, creaciontercero, modificaciontercero, pkidtercero, tipotercero]
     return this.database.executeSql("INSERT INTO ttercero (nombretercero, identificaciontercero, telefonotercero, creaciontercero, modificaciontercero, pkidtercero, tipotercero) VALUES (?, ?, ?, ?, ?, ?, ?)", data).then(data => {
@@ -340,7 +336,7 @@ export class DatabaseProvider {
 
       let plazas = [];
       if (data.rows.length > 0) {
-      //  this.setOcupado('Listando Datos Importados');
+        //  this.setOcupado('Listando Datos Importados');
         for (var i = 0; i < data.rows.length; i++) {
           plazas.push({ pkidsqlite: data.rows.item(i).pkidsqlite, pkidplaza: data.rows.item(i).pkidplaza, nombreplaza: data.rows.item(i).nombreplaza });
         }
@@ -350,7 +346,7 @@ export class DatabaseProvider {
         console.log("No hay datos!");
       }
 
-     // this.setDesocupado();
+      // this.setDesocupado();
       return plazas;
 
     }, err => {
@@ -371,7 +367,7 @@ export class DatabaseProvider {
 
       let sectores = [];
       if (data.rows.length > 0) {
-       // this.setOcupado('Listando Datos Importados');
+        // this.setOcupado('Listando Datos Importados');
         for (var i = 0; i < data.rows.length; i++) {
           sectores.push({ pkidsqlite: data.rows.item(i).pkidsqlite, pkidsector: data.rows.item(i).pkidsector, nombresector: data.rows.item(i).nombresector, fkidplaza: data.rows.item(i).fkidplaza, fkidtiposector: data.rows.item(i).fkidtiposector });
         }
@@ -381,7 +377,7 @@ export class DatabaseProvider {
         console.log("No hay datos!");
       }
 
-     // this.setDesocupado();
+      // this.setDesocupado();
       return sectores;
 
     }, err => {

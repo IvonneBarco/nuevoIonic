@@ -172,7 +172,7 @@ export class PrinterProvider {
         role: 'cancel'
       },
       {
-        text: 'IMPRIMIR',
+        text: imprimir?'IMPRIMIR':"SELECCIONAR",
         handler: (device) => {
           if (!device) {
             // this.showToast('Impresora seleccinada!');

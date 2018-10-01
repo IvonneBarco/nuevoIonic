@@ -9,6 +9,9 @@ import { NumbersToLettersProvider } from '../../providers/numbers-to-letters/num
 import { FechaProvider } from '../../providers/fecha/fecha';
 import { MenuPrincipalPage } from '../menu-principal/menu-principal';
 import { Storage } from '@ionic/storage';
+import { ReciboPage } from '../recibo/recibo';
+import { SingletonProvider } from '../../providers/singleton/singleton';
+
 
 /**
  * Generated class for the RecaudoPuestosEventualesPage page.
@@ -56,6 +59,8 @@ export class RecaudoPuestosEventualesPage {
   apellido: any;
 
   //Variables para cargar recibo
+  reciboPage = ReciboPage;
+
   recibos: any;
   numRecibo: any = '001';
   totalCuota: any;
@@ -108,10 +113,12 @@ export class RecaudoPuestosEventualesPage {
     public speechRecognition: SpeechRecognition,
     private printer: PrinterProvider,
     private conversion: NumbersToLettersProvider,
-    private fechaProvider: FechaProvider,
-    private storage: Storage
+    private storage: Storage, 
+    private singleton:SingletonProvider
   ) {
 
+    console.log("USUARIO: ", singleton.usuario["nombreusuario"]);
+    
     //Recupera id recaudador
     this.storage.get(this.keyIdentificacion).then(
       (val) => {
@@ -190,30 +197,6 @@ export class RecaudoPuestosEventualesPage {
   }
 
 
-  // buscarUsuario() {
-  //   console.log("buscar: ", this.identiStorage);
-  //   this.databaseprovider.getUsuarioId(this.identiStorage).then(
-  //     (data) => {
-  //       this.usuarios = data;
-
-  //       for (let i = 0; i < this.usuarios.length; i++) {
-  //         this.nombreusuario = this.usuarios[i].nombreusuario;
-  //         this.apellido = this.usuarios[i].apellido;
-  //       }
-  //       this.recaudador = this.nombreusuario + ' ' + this.apellido;
-  //       this.storage.set(this.keyRecaudador, this.recaudador);
-
-  //     })
-
-  //   this.storage.get(this.keyRecaudador).then(
-  //     (val) => {
-  //       this.recaudador = val;
-  //       console.log('Nombre Storage r: ', this.recaudador);
-  //     }
-  //   );
-
-  // }
-
   buscarTercero() {
     console.log("buscar: ", this.usuario['identificaciontercero']);
     this.databaseprovider.getTercero(this.usuario['identificaciontercero']).then(data => {
@@ -230,28 +213,9 @@ export class RecaudoPuestosEventualesPage {
 
       console.log(this.usuario['nombretercero']);
 
-      // if (terceros && terceros.length > 0) {
-      //   this.usuario['pkidtercero'] = this.terceros[0].pkidtercero;
-      //   this.usuario['nombretercero'] = this.terceros[0].nombretercero;
-      //   this.usuario['telefonotercero'] = this.terceros[0].telefonotercero;
-      //   this.flagNuevo = false;
-      // }
-      // else {
-      //   this.flagNuevo = true;
-      //   console.log("FLAG: ", this.flagNuevo);
-
-      //   console.log(this.fechaCreacion);
-      // }
-
     })
       .catch(error => {
         console.log("No existe, hay que agregarlo!");
-        // const alert = this.alertCtrl.create({
-        //   title: 'Nuevo Usuario',
-        //   subTitle: 'La identifiación ingresada no existe, por favor complete el formulario para registrar el recaudo',
-        //   buttons: ['Aceptar']
-        // });
-        // alert.present();
       });
 
     console.log(this.usuario['nombretercero']);
@@ -290,20 +254,6 @@ export class RecaudoPuestosEventualesPage {
     this.buscarTercero();
 
   }
-
-  // recaudar(data) {
-  //   console.log("flag ", this.flagNuevo);
-  //   if (this.flagNuevo == false) {
-  //     this.addTercero();
-  //   } 
-
-  //   if (this.flagNuevo == true) {
-  //     this.updateTercero();
-  //   }
-
-  //   this.prepararImpresion(data);
-
-  // }
 
   //Agrega registros desde el formulario
 
@@ -504,8 +454,62 @@ export class RecaudoPuestosEventualesPage {
     toast.present();
   }
 
+  imprimir()
+  {
+    this.navCtrl.push("ReciboPage",{datosRecibo: this.armarRecibo(), callback: this.imprimirFunc});
+  }
+  imprimirFunc = (resultado) => {
+    return new Promise((resolve, reject) => {
+        if(resultado)
+        {
+          this.prepararImpresion();
+        }
+        else
+        {
+          console.log("no imprimir");
+        }
+        
+        resolve();
+    });
+   }
+
+   guardar()
+   {
+     
+     
+     this.navCtrl.push("ReciboPage",{datosRecibo: this.armarRecibo(), callback: this.guardarFunc});
+   }
+   guardarFunc = (resultado) => {
+    return new Promise((resolve, reject) => {
+        if(resultado)
+        {
+          this.guardarRecibo();
+        }
+        else
+        {
+          console.log("no guardar");
+        }
+        
+        resolve();
+    });
+   }
+
+  private armarRecibo() {
+    let datos=[];
+    let numeroEnLetras = this.conversion.numeroALetras(this.unFormat(this.valorPagar), 0);
+    datos.push({ "E": "No Recibo:", "V": this.numRecibo });
+    datos.push({ "E": "Tarifa:", "V": this.format(this.tarifa) });
+    datos.push({ "E": "Valor pagado:", "V": this.format(this.valorPagar) });
+    datos.push({ "E": "En letras:", "V": numeroEnLetras });
+    datos.push({ "E": "Usuario:", "V": this.usuario['nombretercero'] });
+    datos.push({ "E": "Recaudador:", "V": this.recaudador });
+    datos.push({ "E": "Fecha:", "V": new Date().toISOString() }); 
+    return datos;
+  }
+
   //Prepara el documeto a imprimir
-  prepararImpresion(data) {
+  prepararImpresion() {
+
 
     let numeroEnLetras = this.conversion.numeroALetras(this.unFormat(this.valorPagar), 0);
     console.log("valor en letras: " + numeroEnLetras);
@@ -547,7 +551,7 @@ export class RecaudoPuestosEventualesPage {
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT;
     receipt += commands.TEXT_FORMAT.TXT_2HEIGHT;
     receipt += commands.TEXT_FORMAT.TXT_BOLD_ON;
-    receipt += 'Recibo No.: ' + this.numRecibo + ''.toUpperCase();
+    receipt += 'Recibo No.: ' + this.numRecibo;
     receipt += commands.EOL;
 
     //Nombre Usuario    
@@ -575,7 +579,7 @@ export class RecaudoPuestosEventualesPage {
     receipt += commands.TEXT_FORMAT.TXT_NORMAL;
     receipt += commands.TEXT_FORMAT.TXT_BOLD_ON;
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT;
-    receipt += 'Tarifa del mes:      $ ' + this.format(this.tarifa);
+    receipt += 'Tarifa:              $ ' + this.format(this.tarifa);
 
     //Valor pagado
     receipt += commands.EOL;

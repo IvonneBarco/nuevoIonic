@@ -9,7 +9,8 @@ import jsSHA from 'jssha'
 import 'rxjs/add/operator/map';
 import { DatabaseProvider } from '../../providers/database/database';
 import { SincGetProvider } from '../../providers/sinc-get/sinc-get';
-//import { Keyboard } from '@ionic-native';
+import { SingletonProvider } from '../../providers/singleton/singleton';
+import { Keyboard } from '@ionic-native/Keyboard';
 
 @Component({
   selector: 'page-home',
@@ -51,7 +52,8 @@ export class HomePage {
     public apiServices: ApiServicesProvider,
     public databaseprovider: DatabaseProvider,
     public http: Http,
-    private sincget: SincGetProvider
+    private sincget: SincGetProvider, private keyboard: Keyboard, 
+    private singleton:SingletonProvider
   ) {
 
     this.API_URL = GLOBAL.url;
@@ -76,11 +78,16 @@ export class HomePage {
 
   }
 
-  ionViewLoaded() {
+  ionViewDidLoad() {
 
+    
+    
     setTimeout(() => {
-      //Keyboard.show() // for android
-      this.txtUsuario.setFocus();
+      //this.keyboard.show() // for android      
+      this.keyboard.setResizeMode();
+      this.txtUsuario.setFocus();   
+      this.keyboard.show() // for android
+      
     }, 150);
 
   }
@@ -189,8 +196,7 @@ export class HomePage {
               setTimeout(() => {
                 this.sincget.loadUsuarios().then(() => {
                   this.buscarUsuario(true);
-                  // this.navCtrl.setRoot(PlazasPage);
-                  // loading.dismiss();  
+                  
                 }).catch((err) => console.error(err.message));
               }, 1500);
             } else {
@@ -233,16 +239,7 @@ export class HomePage {
     this.databaseprovider.getUsuarioId(this.identificacion).then(
       (data) => {
 
-        // this.usuarios = data;
-
-        // for (let i = 0; i < this.usuarios.length; i++) {
-        //   this.nombreusuario = this.usuarios[i].nombreusuario;
-        //   this.apellido = this.usuarios[i].apellido;
-        //   this.pass = this.usuarios[i].contrasenia;
-        // }
         let usuario = data;
-
-        //        console.log('PASSWORD: ', this.pass);
 
         if (desdeLoginApi || this.comprarPassword(this.contrasenia, usuario["contrasenia"])) {
           console.log("Son Iguales");
@@ -287,24 +284,10 @@ export class HomePage {
     if (usuario != null) {
       this.recaudador = usuario["nombreusuario"] + ' ' + usuario["apellido"];
       this.storage.set(this.keyRecaudador, this.recaudador);
-      this.storage.set("RECAUDADOR", usuario);
+      //this.storage.set("RECAUDADOR", usuario);
+      this.singleton.usuario=usuario;
     }
-    // console.log("buscar: ", this.identificacion);
-    // this.databaseprovider.getUsuarioId(this.identificacion).then(
-    //   (data) => {
-    //     this.usuarios = data;
-
-    //     for (let i = 0; i < this.usuarios.length; i++) {
-    //       this.nombreusuario = this.usuarios[i].nombreusuario;
-    //       this.apellido = this.usuarios[i].apellido;
-    //       this.pass = this.usuarios[i].contrasenia;
-    //     }
-    //     this.recaudador = this.nombreusuario + ' ' + this.apellido;
-    //     this.storage.set(this.keyRecaudador, this.recaudador);
-
-
-    //   })
-
+    
   }
 
 
